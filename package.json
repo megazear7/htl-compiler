@@ -15,6 +15,7 @@
   "author": "Alex Lockhart",
   "license": "ISC",
   "devDependencies": {
-    "esm": "^3.2.5"
+    "esm": "^3.2.5",
+    "fs-extra": "^7.0.1"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "exampleGlobalValue": "Example global value",
+  "some.path.to.a.java.ExampleClass":
+    {
+      "title": "Example title",
+      "description": "Example description"
+    },
+  "some.path.to.a.java.FooClass":
+    {
+      "example": "I am from FooClass"
+    }
+}

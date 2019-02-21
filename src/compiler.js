@@ -1,8 +1,13 @@
 import TokenList from './generator/token-list.js';
+import Interpreter from './interpreter/interpreter.js';
 
 export default class Compiler {
-  constructor(tokens, data, resources) {
-    this.tokenList = new TokenList(tokens, data, resources);
+  constructor(template, data, resources) {
+    this.tokenList = new TokenList(
+      (new Interpreter(template)).getTokenList(),
+      data,
+      resources
+    );
   }
 
   compile() {
