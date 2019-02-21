@@ -2,17 +2,19 @@ import TokenList from './generator/token-list.js';
 import Interpreter from './interpreter.js';
 
 export default class Compiler {
-  constructor(template, data, resources) {
+  constructor(template, resourceData, useModels, resourceTypes) {
     this.template = template;
-    this.data = data;
-    this.resources = resources;
+    this.resourceData = resourceData;
+    this.useModels = useModels;
+    this.resourceTypes = resourceTypes;
   }
 
   compile() {
     return new TokenList(
       (new Interpreter(this.template)).getTokenList(),
-      this.data,
-      this.resources
+      this.resourceData,
+      this.useModels,
+      this.resourceTypes
     ).output;
   }
 
@@ -20,8 +22,9 @@ export default class Compiler {
   compileExampleTokenList() {
     return new TokenList(
       (new Interpreter(this.template)).getExampleTokenList(),
-      this.data,
-      this.resources
+      this.resourceData,
+      this.useModels,
+      this.resourceTypes
     ).output;
   }
 }

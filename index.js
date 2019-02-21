@@ -5,17 +5,18 @@ const Compiler = esmImport('./src/compiler.js').default;
 
 async function main() {
   let exampleHtml = await fs.readFile(path.resolve(__dirname, './example/example.html'), 'utf-8');
-  let exampleData = JSON.parse(await fs.readFile(path.resolve(__dirname, './example/example.json'), 'utf-8'));
+  let resourceData = JSON.parse(await fs.readFile(path.resolve(__dirname, './example/resource-data.json'), 'utf-8'));
+  let useModels = JSON.parse(await fs.readFile(path.resolve(__dirname, './example/use-models.json'), 'utf-8'));
   let fooResourceHtml = await fs.readFile(path.resolve(__dirname, './example/foo-resource.html'), 'utf-8');
-  let exampleResources = { "foo": fooResourceHtml };
+  let resourceTypes = { "foo": fooResourceHtml };
 
-  console.log((new Compiler(exampleHtml, exampleData, exampleResources)).compile());
+  console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compile());
 
   // Remove this once the interpreter works
   console.log('')
   console.log('------------')
   console.log('')
-  console.log((new Compiler(exampleHtml, exampleData, exampleResources)).compileExampleTokenList());
+  console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compileExampleTokenList());
 }
 
 main();
