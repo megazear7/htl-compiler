@@ -1,0 +1,25 @@
+import Target from './target.js';
+import Property from './property.js';
+import Args from './args.js';
+
+export default class Expression {
+  constructor({_hasParens, _functionName, _text, _target, _property, _args, _expression}, context) {
+    this.hasParens = _hasParens;
+    this.functionName = _functionName;
+    this.context = context;
+    this.text = _text;
+
+    if (_target) this.target = new Target(_target);
+    if (_property) this.property = new Property(_property);
+    if (_args) this.args = new Args(_args);
+    if (_expression)this.expression = new Expression(_expression);
+  }
+
+  get output() {
+    if (this.target && this.property) {
+      return this.context[this.target.name][this.property.text];
+    } else {
+      return '';
+    }
+  }
+}
