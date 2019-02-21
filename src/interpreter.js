@@ -1,6 +1,9 @@
 const STATE_TOKEN = 'STATE_TOKEN';
 const STATE_EXPRESSION = 'STATE_EXPRESSION';
+const STATE_FUNCTION = 'STATE_FUNCTION';
 const STATE_TEXT = 'STATE_TEXT';
+
+const DATA_SLY = 'data-sly';
 
 export default class Args {
   constructor(template) {
@@ -15,12 +18,21 @@ export default class Args {
 
   consume(character) {
     this.word += character;
+
+    if (this.word.endsWith(DATA_SLY)) {
+      this.word = this.word.substring(0, this.word.length - DATA_SLY.length);
+      this.tokens.push({
+        "_text": this.word
+      });
+
+      this.state = STATE_FUNCTION;
+    }
   }
 
   getTokenList() {
-    return [{
-		    "_text": this.word
-    }];
+
+
+    return this.tokens;
   }
 
   // Remove this once the interpreter works
