@@ -26,6 +26,7 @@ export default class Token {
       return (new Compiler(
         this.resourceTypes[this.expression.expression.text],
         this.context[this.expression.expression.text] ? this.context[this.expression.expression.text] : { },
+        this.useModels,
         this.resourceTypes)
       ).compile();
     } else if (this.expression) {
