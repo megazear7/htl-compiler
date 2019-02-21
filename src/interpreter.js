@@ -2,6 +2,7 @@ import { FUNCTION_USE } from './generator/token.js';
 
 const STATE_EXPRESSION = 'STATE_EXPRESSION';
 const STATE_FUNCTION = 'STATE_FUNCTION';
+const STATE_ATTRIBUTE = 'STATE_ATTRIBUTE';
 const STATE_TEXT = 'STATE_TEXT';
 const STATE_SLY_ELEMENT = 'STATE_SLY_ELEMENT';
 
@@ -10,6 +11,7 @@ const DATA_SLY_ELEMENT = '<sly';
 const SLY_EXPRESSION_PREFIX = '${';
 const SLY_EXPRESSION_SUFFIX = '}';
 const SLY_FUNCTION_SUFFIX = '="';
+const ATTRIBUTE_SUFFIX = '"';
 
 export default class Args {
   constructor(template) {
@@ -27,6 +29,8 @@ export default class Args {
       this.consumeExpression(character);
     } else if (this.state === STATE_FUNCTION) {
       this.consumeFunction(character);
+    } else if (this.state === STATE_ATTRIBUTE) {
+      this.consumeAttribute(character);
     } else if (this.state === STATE_TEXT) {
       this.consumeText(character);
     } else if (this.state === STATE_SLY_ELEMENT) {
@@ -49,6 +53,16 @@ export default class Args {
 
     if (this.word.endsWith(SLY_FUNCTION_SUFFIX)) {
       this.word = this.word.substring(0, this.word.length - SLY_FUNCTION_SUFFIX.length);
+      this.pushToken();
+      this.state = STATE_ATTRIBUTE;
+    }
+  }
+
+  consumeAttribute(character) {
+    this.word += character;
+
+    if (this.word.endsWith(ATTRIBUTE_SUFFIX)) {
+      this.word = this.word.substring(0, this.word.length - ATTRIBUTE_SUFFIX.length);
       this.pushToken();
       this.state = STATE_TEXT;
     }
@@ -87,6 +101,8 @@ export default class Args {
       this.pushExpression();
     } else if (this.state === STATE_FUNCTION) {
       this.pushFunction();
+    } else if (this.state === STATE_ATTRIBUTE) {
+      this.pushAttribute();
     } else if (this.state === STATE_TEXT) {
       this.pushText();
     } else if (this.state === STATE_SLY_ELEMENT) {
@@ -109,26 +125,25 @@ export default class Args {
   			}
   		}
   	});
-    /*
-    this.tokens.push({
-      "_text": " --expression-for__" + this.word + "__ "
-    });
-    */
   }
 
   pushFunction() {
-    let functionName = this.word.split('.')[0];
-    let handle = this.word.split('.')[1];
+    this.functionName = this.word.split('.')[0];
+    this.handle = this.word.split('.')[1];
 
-    if (functionName === FUNCTION_USE) {
+    this.state = STATE_SLY_ELEMENT;
+  }
+
+  pushAttribute() {
+    if (this.functionName === FUNCTION_USE) {
       this.tokens.push({
-    		"_variableName": handle,
+    		"_variableName": this.handle,
     		"_expression": {
     			"_hasParens": false,
-    			"_functionName": functionName,
+    			"_functionName": this.functionName,
     			"_expression": {
     				"_hasParens": false,
-    				"_text": "some.path.to.a.java.ExampleClass" // TODO get this expression dynamically
+    				"_text": this.word
     			},
     			"_args": [{
     				"_hasParens": false,
@@ -143,6 +158,9 @@ export default class Args {
         "_text": " --function__" + this.word + "__ "
       });
     }
+
+    this.functionName = '';
+    this.handle = '';
   }
 
   pushText() {
