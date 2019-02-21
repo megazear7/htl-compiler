@@ -9,7 +9,11 @@ const exampleData = {
   }
 }
 
-const tokenArray = [
+const exampleResources = {
+  "foo.html": "<div>This is foo.html</div>"
+}
+
+const exampleTokenArray = [
   {
 		"_variableName": "headerComponent",
 		"_expression": {
@@ -171,4 +175,4 @@ const tokenArray = [
 	}
 ];
 
-console.log((new Compiler(tokenArray, exampleData)).compile());
+console.log((new Compiler(exampleTokenArray, exampleData, exampleResources)).compile());

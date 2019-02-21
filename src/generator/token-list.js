@@ -1,8 +1,8 @@
 import Token from './token.js';
 
 export default class TokenList {
-  constructor(tokenArray, context) {
-    this.tokens = tokenArray.map(token => new Token(token, context));
+  constructor(tokenArray, context, resources) {
+    this.tokens = tokenArray.map(token => new Token(token, context, resources));
   }
 
   get output() {
