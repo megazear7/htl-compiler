@@ -13,10 +13,10 @@ async function main() {
   console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compile());
 
   // Remove this once the interpreter works
-  console.log('')
-  console.log('------------')
-  console.log('')
-  console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compileExampleTokenList());
+  //console.log('')
+  //console.log('------------')
+  //console.log('')
+  //console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compileExampleTokenList());
 }
 
 main();

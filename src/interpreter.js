@@ -30,13 +30,17 @@ export default class Args {
   }
 
   consumeExpression(character) {
-    this.word += character;
+    // this.word += character;
     // TODO
+
+    this.state = STATE_TEXT;
   }
 
   consumeFunction(character) {
-    this.word += character;
     // TODO
+    // this.word += character;
+
+    this.state = STATE_TEXT;
   }
 
   consumeText(character) {
@@ -73,6 +77,8 @@ export default class Args {
     } else if (this.state === STATE_SLY_ELEMENT) {
       this.pushSlyElement();
     }
+
+    this.word = '';
   }
 
   pushExpression() {
