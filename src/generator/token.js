@@ -23,8 +23,11 @@ export default class Token {
       this.context[this.variableName] = this.useModels[this.expression.expression.text];
       return '';
     } else if (this.expression && this.expression.functionName === FUNCTION_RESOURCE) {
-      // TODO Instead of passing in all of the example data pass in only a sub set based upon the resource name. Do the same for the resourceTypes
-      return (new Compiler(this.resourceTypes[this.expression.expression.text], this.context, this.resourceTypes)).compile();
+      return (new Compiler(
+        this.resourceTypes[this.expression.expression.text],
+        this.context[this.expression.expression.text] ? this.context[this.expression.expression.text] : { },
+        this.resourceTypes)
+      ).compile();
     } else if (this.expression) {
       return this.expression.output;
     } else {
