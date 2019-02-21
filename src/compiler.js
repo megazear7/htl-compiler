@@ -1,5 +1,6 @@
 import TokenList from './generator/token-list.js';
-import Interpreter from './interpreter.js';
+const ThrowingErrorListener = require('../node_modules/@adobe/htlengine/src/parser/htl/ThrowingErrorListener.js');
+const TemplateParser = require('../node_modules/@adobe/htlengine/src/parser/html/TemplateParser.js');
 
 export default class Compiler {
   constructor(template, resourceData, useModels, resourceTypes) {
@@ -10,18 +11,12 @@ export default class Compiler {
   }
 
   compile() {
-    return new TokenList(
-      (new Interpreter(this.template)).getTokenList(),
-      this.resourceData,
-      this.useModels,
-      this.resourceTypes
-    ).output;
-  }
+    const tokenList = new TemplateParser()
+      .withErrorListener(ThrowingErrorListener.INSTANCE)
+      .parse(this.template);
 
-  // Remove this once the interpreter works
-  compileExampleTokenList() {
     return new TokenList(
-      (new Interpreter(this.template)).getExampleTokenList(),
+      tokenList,
       this.resourceData,
       this.useModels,
       this.resourceTypes

@@ -17,5 +17,8 @@
   "devDependencies": {
     "esm": "^3.2.5",
     "fs-extra": "^7.0.1"
+  },
+  "dependencies": {
+    "@adobe/htlengine": "^2.1.1"
   }
 }
