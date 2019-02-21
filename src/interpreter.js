@@ -5,6 +5,8 @@ const STATE_SLY_ELEMENT = 'STATE_SLY_ELEMENT';
 
 const DATA_SLY_ATTRIBUTE = 'data-sly';
 const DATA_SLY_ELEMENT = '<sly';
+const SLY_EXPRESSION_PREFIX = '${';
+const SLY_EXPRESSION_SUFFIX = '}';
 
 export default class Args {
   constructor(template) {
@@ -30,10 +32,13 @@ export default class Args {
   }
 
   consumeExpression(character) {
-    // this.word += character;
-    // TODO
+    this.word += character;
 
-    this.state = STATE_TEXT;
+    if (this.word.endsWith(SLY_EXPRESSION_SUFFIX)) {
+      this.word = this.word.substring(0, this.word.length - SLY_EXPRESSION_SUFFIX.length);
+      this.pushToken();
+      this.state = STATE_TEXT;
+    }
   }
 
   consumeFunction(character) {
@@ -54,6 +59,10 @@ export default class Args {
       this.word = this.word.substring(0, this.word.length - DATA_SLY_ELEMENT.length);
       this.pushToken();
       this.state = STATE_SLY_ELEMENT;
+    } else if (this.word.endsWith(SLY_EXPRESSION_PREFIX)) {
+      this.word = this.word.substring(0, this.word.length - SLY_EXPRESSION_PREFIX.length);
+      this.pushToken();
+      this.state = STATE_EXPRESSION;
     }
   }
 
@@ -82,7 +91,21 @@ export default class Args {
   }
 
   pushExpression() {
-    // TODO
+    /*var expressions = this.word.split(".");
+    this.tokens.push({
+  		"_variableName": "var_0",
+  		"_expression": {
+  			"_target": {
+  				"_name": expressions[0]
+  			},
+  			"_property": {
+  				"_text": expressions[1]
+  			}
+  		}
+  	});*/
+    this.tokens.push({
+      "_text": " --expression-for-" + this.word + "-- " 
+    });
   }
 
   pushFunction() {
