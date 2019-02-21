@@ -1,16 +1,27 @@
 import TokenList from './generator/token-list.js';
-import Interpreter from './interpreter/interpreter.js';
+import Interpreter from './interpreter.js';
 
 export default class Compiler {
   constructor(template, data, resources) {
-    this.tokenList = new TokenList(
-      (new Interpreter(template)).getTokenList(),
-      data,
-      resources
-    );
+    this.template = template;
+    this.data = data;
+    this.resources = resources;
   }
 
   compile() {
-    return this.tokenList.output;
+    return new TokenList(
+      (new Interpreter(this.template)).getTokenList(),
+      this.data,
+      this.resources
+    ).output;
+  }
+
+  // Remove this once the interpreter works
+  compileExampleTokenList() {
+    return new TokenList(
+      (new Interpreter(this.template)).getExampleTokenList(),
+      this.data,
+      this.resources
+    ).output;
   }
 }

@@ -1,4 +1,5 @@
 import Expression from './expression.js';
+import Compiler from '../compiler.js';
 
 export const FUNCTION_USE = 'use';
 export const FUNCTION_RESOURCE = 'resource';
@@ -21,7 +22,8 @@ export default class Token {
       this.context[this.variableName] = this.context[this.expression.expression.text];
       return '';
     } else if (this.expression && this.expression.functionName === FUNCTION_RESOURCE) {
-      return this.resources[this.expression.expression.text]
+      // TODO Instead of passing in all of the example data pass in only a sub set based upon the resource name. Do the same for the resources
+      return (new Compiler(this.resources[this.expression.expression.text], this.context, this.resources)).compile();
     } else if (this.expression) {
       return this.expression.output;
     } else {

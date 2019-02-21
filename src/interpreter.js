@@ -1,10 +1,30 @@
+const STATE_TOKEN = 'STATE_TOKEN';
+const STATE_EXPRESSION = 'STATE_EXPRESSION';
+const STATE_TEXT = 'STATE_TEXT';
+
 export default class Args {
   constructor(template) {
-    this.template = template;
+    this.tokens = [];
+    this.state = STATE_TEXT;
+    this.word = '';
+    let characters = template.split('');
+    while (characters.length > 0) {
+      this.consume(characters.shift());
+    }
+  }
+
+  consume(character) {
+    this.word += character;
   }
 
   getTokenList() {
-    // TODO generate the token list from this.template
+    return [{
+		    "_text": this.word
+    }];
+  }
+
+  // Remove this once the interpreter works
+  getExampleTokenList() {
     return exampleTokenList();
   }
 }

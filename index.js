@@ -10,6 +10,12 @@ async function main() {
   let exampleResources = { "foo": fooResourceHtml };
 
   console.log((new Compiler(exampleHtml, exampleData, exampleResources)).compile());
+
+  // Remove this once the interpreter works
+  console.log('')
+  console.log('------------')
+  console.log('')
+  console.log((new Compiler(exampleHtml, exampleData, exampleResources)).compileExampleTokenList());
 }
 
 main();
