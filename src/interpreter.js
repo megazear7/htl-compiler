@@ -12,6 +12,7 @@ const SLY_EXPRESSION_PREFIX = '${';
 const SLY_EXPRESSION_SUFFIX = '}';
 const SLY_FUNCTION_SUFFIX = '="';
 const ATTRIBUTE_SUFFIX = '"';
+const SLY_END_TAG = '</sly';
 
 export default class Args {
   constructor(template) {
@@ -25,7 +26,12 @@ export default class Args {
   }
 
   consume(character) {
-    if (this.state === STATE_EXPRESSION) {
+    if (this.collectingSlyElement && character === ">") {
+      this.collectingSlyElement = false;
+      this.state = STATE_TEXT;
+    } else if (this.word.endsWith(SLY_END_TAG)) {
+      this.consumeSlyClosingTag(character);
+    } else if (this.state === STATE_EXPRESSION) {
       this.consumeExpression(character);
     } else if (this.state === STATE_FUNCTION) {
       this.consumeFunction(character);
@@ -36,6 +42,12 @@ export default class Args {
     } else if (this.state === STATE_SLY_ELEMENT) {
       this.consumeSlyElement(character);
     }
+  }
+
+  consumeSlyClosingTag(character) {
+    this.word = this.word.substring(0, this.word.length - SLY_END_TAG.length);
+    this.pushToken();
+    this.state = STATE_TEXT;
   }
 
   consumeExpression(character) {
@@ -170,7 +182,7 @@ export default class Args {
   }
 
   pushSlyElement() {
-    // TODO
+    this.collectingSlyElement = true;
   }
 
   getTokenList() {
