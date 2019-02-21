@@ -1,12 +1,15 @@
+import { FUNCTION_USE } from './generator/token.js';
+
 const STATE_EXPRESSION = 'STATE_EXPRESSION';
 const STATE_FUNCTION = 'STATE_FUNCTION';
 const STATE_TEXT = 'STATE_TEXT';
 const STATE_SLY_ELEMENT = 'STATE_SLY_ELEMENT';
 
-const DATA_SLY_ATTRIBUTE = 'data-sly';
+const DATA_SLY_ATTRIBUTE = 'data-sly-';
 const DATA_SLY_ELEMENT = '<sly';
 const SLY_EXPRESSION_PREFIX = '${';
 const SLY_EXPRESSION_SUFFIX = '}';
+const SLY_FUNCTION_SUFFIX = '="';
 
 export default class Args {
   constructor(template) {
@@ -42,10 +45,13 @@ export default class Args {
   }
 
   consumeFunction(character) {
-    // TODO
-    // this.word += character;
+    this.word += character;
 
-    this.state = STATE_TEXT;
+    if (this.word.endsWith(SLY_FUNCTION_SUFFIX)) {
+      this.word = this.word.substring(0, this.word.length - SLY_FUNCTION_SUFFIX.length);
+      this.pushToken();
+      this.state = STATE_TEXT;
+    }
   }
 
   consumeText(character) {
@@ -91,7 +97,7 @@ export default class Args {
   }
 
   pushExpression() {
-    /*var expressions = this.word.split(".");
+    var expressions = this.word.split(".");
     this.tokens.push({
   		"_variableName": "var_0",
   		"_expression": {
@@ -102,14 +108,41 @@ export default class Args {
   				"_text": expressions[1]
   			}
   		}
-  	});*/
+  	});
+    /*
     this.tokens.push({
-      "_text": " --expression-for-" + this.word + "-- " 
+      "_text": " --expression-for__" + this.word + "__ "
     });
+    */
   }
 
   pushFunction() {
-    // TODO
+    let functionName = this.word.split('.')[0];
+    let handle = this.word.split('.')[1];
+
+    if (functionName === FUNCTION_USE) {
+      this.tokens.push({
+    		"_variableName": handle,
+    		"_expression": {
+    			"_hasParens": false,
+    			"_functionName": functionName,
+    			"_expression": {
+    				"_hasParens": false,
+    				"_text": "some.path.to.a.java.ExampleClass" // TODO get this expression dynamically
+    			},
+    			"_args": [{
+    				"_hasParens": false,
+    				"_map": {
+
+    				}
+    			}]
+    		}
+    	});
+    } else {
+      this.tokens.push({
+        "_text": " --function__" + this.word + "__ "
+      });
+    }
   }
 
   pushText() {
