@@ -1,9 +1,10 @@
-const STATE_TOKEN = 'STATE_TOKEN';
 const STATE_EXPRESSION = 'STATE_EXPRESSION';
 const STATE_FUNCTION = 'STATE_FUNCTION';
 const STATE_TEXT = 'STATE_TEXT';
+const STATE_SLY_ELEMENT = 'STATE_SLY_ELEMENT';
 
-const DATA_SLY = 'data-sly';
+const DATA_SLY_ATTRIBUTE = 'data-sly';
+const DATA_SLY_ELEMENT = '<sly';
 
 export default class Args {
   constructor(template) {
@@ -17,21 +18,82 @@ export default class Args {
   }
 
   consume(character) {
-    this.word += character;
-
-    if (this.word.endsWith(DATA_SLY)) {
-      this.word = this.word.substring(0, this.word.length - DATA_SLY.length);
-      this.tokens.push({
-        "_text": this.word
-      });
-
-      this.state = STATE_FUNCTION;
+    if (this.state === STATE_EXPRESSION) {
+      this.consumeExpression(character);
+    } else if (this.state === STATE_FUNCTION) {
+      this.consumeFunction(character);
+    } else if (this.state === STATE_TEXT) {
+      this.consumeText(character);
+    } else if (this.state === STATE_SLY_ELEMENT) {
+      this.consumeSlyElement(character);
     }
   }
 
+  consumeExpression(character) {
+    this.word += character;
+    // TODO
+  }
+
+  consumeFunction(character) {
+    this.word += character;
+    // TODO
+  }
+
+  consumeText(character) {
+    this.word += character;
+
+    if (this.word.endsWith(DATA_SLY_ATTRIBUTE)) {
+      this.word = this.word.substring(0, this.word.length - DATA_SLY_ATTRIBUTE.length);
+      this.pushToken();
+      this.state = STATE_FUNCTION;
+    } else if (this.word.endsWith(DATA_SLY_ELEMENT)) {
+      this.word = this.word.substring(0, this.word.length - DATA_SLY_ELEMENT.length);
+      this.pushToken();
+      this.state = STATE_SLY_ELEMENT;
+    }
+  }
+
+  consumeSlyElement(character) {
+    if ([" "].indexOf(character) >= 0) {
+      this.word = this.word.substring(0, this.word.length - DATA_SLY_ATTRIBUTE.length);
+      this.pushToken();
+      this.state = STATE_TEXT;
+    } else {
+      this.word += character;
+    }
+  }
+
+  pushToken() {
+    if (this.state === STATE_EXPRESSION) {
+      this.pushExpression();
+    } else if (this.state === STATE_FUNCTION) {
+      this.pushFunction();
+    } else if (this.state === STATE_TEXT) {
+      this.pushText();
+    } else if (this.state === STATE_SLY_ELEMENT) {
+      this.pushSlyElement();
+    }
+  }
+
+  pushExpression() {
+    // TODO
+  }
+
+  pushFunction() {
+    // TODO
+  }
+
+  pushText() {
+    this.tokens.push({
+      "_text": this.word
+    });
+  }
+
+  pushSlyElement() {
+    // TODO
+  }
+
   getTokenList() {
-
-
     return this.tokens;
   }
 
