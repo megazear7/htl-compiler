@@ -1,5 +1,4 @@
 import TokenList from './generator/token-list.js';
-const ThrowingErrorListener = require('../node_modules/@adobe/htlengine/src/parser/htl/ThrowingErrorListener.js');
 const TemplateParser = require('../node_modules/@adobe/htlengine/src/parser/html/TemplateParser.js');
 
 export default class Compiler {
@@ -11,9 +10,7 @@ export default class Compiler {
   }
 
   compile() {
-    const tokenList = new TemplateParser()
-      .withErrorListener(ThrowingErrorListener.INSTANCE)
-      .parse(this.template);
+    const tokenList = new TemplateParser().parse(this.template);
 
     return new TokenList(
       tokenList,
