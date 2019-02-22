@@ -6,7 +6,8 @@
   "repository": "https://github.com/megazear7/htl-compiler",
   "scripts": {
     "start": "node index.js",
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "test:create": "node ./create.js"
   },
   "keywords": [
     "htl",
