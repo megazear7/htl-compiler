@@ -9,5 +9,11 @@ const newTestNumber = fs.readdirSync(path.resolve(__dirname, `test/tests`))
 
 const describeName = `describe-${newTestNumber}`;
 
-
 fs.mkdirSync(path.resolve(__dirname, `test/tests`, describeName));
+
+fs.writeFile(
+  path.resolve(__dirname, 'test/tests', describeName, 'config.json'), `{
+  "describe": "Example scenario"
+}`,
+  'utf-8'
+);
