@@ -1,4 +1,3 @@
 {
-  "template": "header-component.html",
   "it": "Use models and data-sly-resource should work together"
 }

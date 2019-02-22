@@ -13,9 +13,22 @@ const fileName = `test-${newTestNumber}`;
 
 fs.writeFile(
   path.resolve(__dirname, `./test/cases/${fileName}.json`), `{
-  "template": "example-test.html",
   "it": "Should match the output"
 }`,
+  'utf-8'
+);
+
+fs.writeFile(
+  path.resolve(__dirname, `./test/test-templates/${fileName}.html`), `
+<p>Example Test</p>
+
+<sly data-sly-use.headerComponent="some.path.to.a.java.ExampleClass"></sly>
+
+<h1>\${headerComponent.title}</h1>
+<p>\${headerComponent.description}</p>
+
+<sly data-sly-resource="\${'foo'}"></sly>
+`,
   'utf-8'
 );
 
