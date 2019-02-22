@@ -4,25 +4,30 @@ const assert = require('assert');
 const esmImport = require('esm')(module);
 const Compiler = esmImport('../src/compiler.js').default;
 
-describe('Each test case', () => {
-  fs.readdirSync(path.resolve(__dirname, `./cases`)).forEach(async testName => {
-    let fileName = testName.split('.')[0];
-    let test = JSON.parse(fs.readFileSync(path.resolve(__dirname, `./cases/${fileName}.json`), 'utf-8'));
-    let template = fs.readFileSync(path.resolve(__dirname, `./test-templates/${fileName}.html`), 'utf-8');
-    let resourceData = JSON.parse(fs.readFileSync(path.resolve(__dirname, `./resource-data/${fileName}.json`), 'utf-8'));
-    let useModels = JSON.parse(fs.readFileSync(path.resolve(__dirname, `./use-models/${fileName}.json`), 'utf-8'));
-    let resourceTypes = JSON.parse(fs.readFileSync(path.resolve(__dirname, `./resources/${fileName}.json`), 'utf-8'));
+fs.readdirSync(path.resolve(__dirname, `./tests`)).forEach(describeDir => {
+  let describeConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, `config.json`), 'utf-8'));
+  describe(describeConfig.describe, () => {
+    fs.readdirSync(path.resolve(__dirname, 'tests', describeDir)).forEach(itDir => {
+      if (itDir !== 'config.json') {
+        let template = fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `template.html`), 'utf-8');
+        let expected = fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, 'expected.html'), 'utf-8');
 
-    Object.keys(resourceTypes).forEach(key => {
-      let templateFileName = resourceTypes[key];
-      resourceTypes[key] = fs.readFileSync(path.resolve(__dirname, `./templates/${templateFileName}`), 'utf-8');
-    });
+        let itConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, 'config.json'), 'utf-8'));
+        let resourceData = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `resource-data.json`), 'utf-8'));
+        let useModels = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `use-models.json`), 'utf-8'));
+        let resourceTypes = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `resources.json`), 'utf-8'));
 
-    let output = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
-    let expected = fs.readFileSync(path.resolve(__dirname, `./expected/${fileName}.html`), 'utf-8');
+        Object.keys(resourceTypes).forEach(key => {
+          let templateFileName = resourceTypes[key];
+          resourceTypes[key] = fs.readFileSync(path.resolve(__dirname, `./templates/${templateFileName}`), 'utf-8');
+        });
 
-    it(test.it, () => {
-      assert.equal(output.trim(), expected.trim());
+        let output = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
+
+        it(itConfig.it, () => {
+          assert.equal(output.trim(), expected.trim());
+        });
+      }
     });
   });
 });
