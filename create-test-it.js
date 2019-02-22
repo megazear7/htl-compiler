@@ -1,25 +1,35 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const newTestNumber = fs.readdirSync(path.resolve(__dirname, `./test/cases`))
-.map(fileName => fileName.split("test-")[1])
-.map(fileName => fileName.split(".json")[0])
+let describeNumber = 1;
+
+process.argv.forEach(arg => {
+  if (arg.startsWith('describe=')) {
+    describeNumber = arg.split('describe=')[1];
+  }
+});
+
+const newTestNumber = fs.readdirSync(path.resolve(__dirname, `test/tests/describe-${describeNumber}`))
+.filter(name => name.startsWith('it-'))
+.map(name => name.split("it-")[1])
 .map(testNumber => parseInt(testNumber))
 .reduce((a, b) => Math.max(a, b)) + 1;
 
-console.log(newTestNumber);
+const itName = `it-${newTestNumber}`;
 
-const fileName = `test-${newTestNumber}`;
+console.log(itName);
+
+fs.mkdirSync(path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName));
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/cases/${fileName}.json`), `{
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'config.json'), `{
   "it": "Should match the output"
 }`,
   'utf-8'
 );
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/test-templates/${fileName}.html`), `
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'template.html'), `
 <p>Example Test</p>
 
 <sly data-sly-use.headerComponent="some.path.to.a.java.ExampleClass"></sly>
@@ -33,7 +43,7 @@ fs.writeFile(
 );
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/resource-data/${fileName}.json`), `{
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'resource-data.json'), `{
   "exampleGlobalValue": "Example global value"
 }
 `,
@@ -41,7 +51,7 @@ fs.writeFile(
 );
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/use-models/${fileName}.json`), `{
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'use-models.json'), `{
   "some.path.to.a.java.ExampleClass":
     {
       "title": "Example title",
@@ -57,7 +67,7 @@ fs.writeFile(
 );
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/resources/${fileName}.json`), `{
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'resources.json'), `{
   "foo": "foo-resource.html"
 }
 `
@@ -66,7 +76,7 @@ fs.writeFile(
 );
 
 fs.writeFile(
-  path.resolve(__dirname, `./test/expected/${fileName}.html`), `
+  path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName, 'expected.html'), `
 <p>Example Test</p>
 
 
