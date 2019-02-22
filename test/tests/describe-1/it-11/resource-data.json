@@ -1,0 +1,7 @@
+{
+  "exampleGlobalValue": {
+    "nested": {
+      "deeplyNested": "hello"
+    }
+  }
+}
