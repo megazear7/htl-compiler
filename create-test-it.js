@@ -13,11 +13,9 @@ const newTestNumber = fs.readdirSync(path.resolve(__dirname, `test/tests/describ
 .filter(name => name.startsWith('it-'))
 .map(name => name.split("it-")[1])
 .map(testNumber => parseInt(testNumber))
-.reduce((a, b) => Math.max(a, b)) + 1;
+.reduce((a, b) => Math.max(a, b), 0) + 1;
 
 const itName = `it-${newTestNumber}`;
-
-console.log(itName);
 
 fs.mkdirSync(path.resolve(__dirname, `test/tests/describe-${describeNumber}`, itName));
 
