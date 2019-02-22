@@ -1,0 +1,3 @@
+{
+  "it": "should work with a deeply nested global variable wrapped in a sly element with another element inside."
+}
