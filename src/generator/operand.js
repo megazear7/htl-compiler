@@ -1,17 +1,21 @@
+import Expression from './expression.js';
+
 export default class Operand {
-  constructor({_name, _text}, context) {
-    this.name = _name;
-    this.text = _text;
+  constructor(config, context) {
+    this.config = config;
+    this.name = config._name;
+    this.text = config._text;
+    this.target = config._target;
     this.context = context;
   }
 
   get value() {
-    if (this.name) {
-      return this.context[this.name];
+    if (this.name || this.target) {
+      return new Expression(this.config, this.context).value;
     } else if (this.text) {
       return this.text;
     } else {
-      return 0;
+      return undefined;
     }
   }
 }

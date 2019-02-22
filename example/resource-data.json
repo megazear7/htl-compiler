@@ -1,3 +1,5 @@
 {
-  "exampleGlobalValue": "Example global value"
+  "some": {
+    "sub": "Example global value"
+  }
 }

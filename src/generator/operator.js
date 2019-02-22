@@ -7,13 +7,16 @@ export default class Operator {
   }
 
   get output() {
-    let operands = this.operands.slice(1);
-    return operands.reduce((total, operand) => {
-      if (this.sym === '+') {
-        return total + operand.value
-      } else {
-        throw new Error('Unsupported operator');
+    return this.operands.reduce((total, operand) => {
+      if (typeof total === 'undefined' && typeof operand.value !== 'undefined') {
+        return operand.value;
+      } else if (typeof operand.value !== 'undefined') {
+        if (this.sym === '+') {
+          return total + operand.value
+        } else {
+          throw new Error('Unsupported operator');
+        }
       }
-    }, this.operands[0].value);
+    }, undefined);
   }
 }

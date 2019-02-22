@@ -19,6 +19,10 @@ export default class Expression {
   }
 
   get output() {
+    return this.value ? this.value : '';
+  }
+
+  get value() {
     if (this.target && this.property) {
       return this.context[this.target.name][this.property.text];
     } else if (this.name) {
@@ -26,7 +30,7 @@ export default class Expression {
     } else if (this.operator) {
       return this.operator.output;
     } else {
-      return '';
+      return undefined;
     }
   }
 }
