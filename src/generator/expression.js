@@ -12,10 +12,10 @@ export default class Expression {
     this.name = _name;
 
     if (_operator && _operands) this.operator = new Operator(_operator.sym, _operands, context);
-    if (_target) this.target = new Target(_target);
+    if (_target) this.target = new Target(_target, context);
     if (_property) this.property = new Property(_property);
     if (_args) this.args = new Args(_args);
-    if (_expression)this.expression = new Expression(_expression);
+    if (_expression) this.expression = new Expression(_expression);
   }
 
   get output() {
@@ -24,7 +24,7 @@ export default class Expression {
 
   get value() {
     if (this.target && this.property) {
-      return this.context[this.target.name][this.property.text];
+      return this.target.value[this.property.text];
     } else if (this.name) {
       return this.context[this.name];
     } else if (this.operator) {

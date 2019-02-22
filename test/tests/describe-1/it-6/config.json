@@ -1,0 +1,3 @@
+{
+  "it": "should work with deeply nested global variables without a wrapping element"
+}

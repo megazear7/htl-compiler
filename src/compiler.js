@@ -12,8 +12,6 @@ export default class Compiler {
   compile() {
     const tokenList = new TemplateParser().parse(this.template);
 
-    // console.log(tokenList);
-
     return new TokenList(
       tokenList,
       this.resourceData,
