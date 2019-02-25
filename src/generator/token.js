@@ -3,6 +3,7 @@ import Compiler from '../compiler.js';
 
 export const FUNCTION_USE = 'use';
 export const FUNCTION_RESOURCE = 'resource';
+export const FUNCTION_XSS = 'xss';
 
 export default class Token {
   constructor({_variableName, _text, _location, _expression}, context, useModels, resourceTypes) {
@@ -29,6 +30,15 @@ export default class Token {
         this.useModels,
         this.resourceTypes)
       ).compile();
+    } else if (this.expression && this.expression.functionName === FUNCTION_XSS) {
+      // TODO implement save cross site scripting protection.
+      this.context[this.variableName] = this.expression.expression.value;
+      return '';
+    } else if (this.expression && this.variableName) {
+      this.context[this.variableName] = this.expression.value;
+      return '';
+    } else if (this.variableName) {
+      return this.context[this.variableName] ? this.context[this.variableName] : '';
     } else if (this.expression) {
       return this.expression.output;
     } else {

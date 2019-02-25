@@ -1,6 +1,6 @@
 import Target from './target.js';
 import Property from './property.js';
-import Args from './args.js';
+import Arg from './arg.js';
 import Operator from './operator.js';
 
 export default class Expression {
@@ -14,8 +14,8 @@ export default class Expression {
     if (_operator && _operands) this.operator = new Operator(_operator.sym, _operands, context);
     if (_target) this.target = new Target(_target, context);
     if (_property) this.property = new Property(_property);
-    if (_args) this.args = new Args(_args);
-    if (_expression) this.expression = new Expression(_expression);
+    if (_args) this.args = _args.map(arg => new Arg(arg));
+    if (_expression) this.expression = new Expression(_expression, context);
   }
 
   get output() {
