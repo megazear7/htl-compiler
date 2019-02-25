@@ -1,0 +1,8 @@
+{
+  "exampleGlobalValue": {
+    "nested": {
+      "deeplyNested": "hello"
+    }
+  },
+  "anotherValue": "some other value"
+}

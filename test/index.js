@@ -25,7 +25,7 @@ fs.readdirSync(path.resolve(__dirname, `./tests`)).forEach(describeDir => {
         let output = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
 
         it(itConfig.it, () => {
-          assert.equal(output.trim(), expected.trim());
+          assert.equal(output.replace(/\s{2,}/g,' ').trim(), expected.replace(/\s{2,}/g,' ').trim());
         });
       }
     });
