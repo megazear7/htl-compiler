@@ -37,6 +37,7 @@ export default class Token {
         this.resourceTypes)
       ).compile();
     } else if (this.expression && this.expression.functionName === FUNCTION_LIST) {
+      // TODO what is this supposed to do?
       return '';
     } else if (this.expression && this.expression.functionName === FUNCTION_XSS) {
       // TODO implement save cross site scripting protection.
@@ -61,7 +62,7 @@ export default class Token {
     } else if (this.variableName) {
       return this.context[this.variableName] ? this.context[this.variableName] : '';
     } else if (this.expression) {
-      return this.expression.output;
+      return '';
     } else {
       return '';
     }
