@@ -6,5 +6,10 @@
       }
     }
   },
-  "hello": "world"
+  "hello": "world",
+  "items": [
+    "AAA",
+    "BBB",
+    "CCC"
+  ]
 }

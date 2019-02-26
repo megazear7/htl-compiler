@@ -4,20 +4,26 @@ import Compiler from '../compiler.js';
 export const FUNCTION_USE = 'use';
 export const FUNCTION_RESOURCE = 'resource';
 export const FUNCTION_XSS = 'xss';
+export const FUNCTION_LIST = 'listInfo';
 
 export default class Token {
-  constructor({_variableName, _text, _location, _expression}, context, useModels, resourceTypes) {
+  constructor({_variableName, _text, _location, _expression, _listVariable, _itemVariable, _indexVariable, constructor: { name }}, tokenList, context, useModels, resourceTypes) {
+    this.type = name;
     this.variableName = _variableName;
     this.text = _text;
     this.location = _location;
     this.context = context;
     this.useModels = useModels;
     this.resourceTypes = resourceTypes;
+    this.listVariable = _listVariable;
+    this.itemVariable = _itemVariable;
+    this.indexVariable = _indexVariable;
+    this.tokenList = tokenList;
 
     if (_expression) this.expression = new Expression(_expression, context);
   }
 
-  get output() {
+  output() {
     if (this.text && this.text.indexOf('<sly') !== 0 && this.text.indexOf('</sly') !== 0) {
       return this.text;
     } else if (this.expression && this.expression.functionName === FUNCTION_USE) {
@@ -30,9 +36,24 @@ export default class Token {
         this.useModels,
         this.resourceTypes)
       ).compile();
+    } else if (this.expression && this.expression.functionName === FUNCTION_LIST) {
+      return '';
     } else if (this.expression && this.expression.functionName === FUNCTION_XSS) {
       // TODO implement save cross site scripting protection.
       this.context[this.variableName] = this.expression.expression.value;
+      return '';
+    } else if (this.listVariable) {
+      this.context[this.indexVariable] = this.context[this.indexVariable] + 1 || 0;
+      if (this.context[this.indexVariable] < this.context[this.listVariable].length) {
+        this.context[this.itemVariable] = this.context[this.listVariable][this.context[this.indexVariable]];
+        this.endToken.token.recurse = true;
+      }
+      if (this.context[this.indexVariable] >= this.context[this.listVariable].length-1) {
+        this.endToken.token.recurse = false;
+      }
+      return '';
+    } else if (this.type === 'End' && this.recurse) {
+      this.tokenList.goTo(this.startToken.index-1);
       return '';
     } else if (this.expression && this.variableName) {
       this.context[this.variableName] = this.expression.value;

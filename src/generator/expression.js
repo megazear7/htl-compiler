@@ -11,7 +11,7 @@ export default class Expression {
     this.text = _text;
     this.name = _name;
 
-    if (_operator && _operands) this.operator = new Operator(_operator.sym, _operands, context);
+    if (_operator) this.operator = new Operator(_operator.sym, _operands, _target, context);
     if (_target) this.target = new Target(_target, context);
     if (_property) this.property = new Property(_property);
     if (_args) this.args = _args.map(arg => new Arg(arg));
@@ -29,6 +29,8 @@ export default class Expression {
       return this.context[this.name];
     } else if (this.operator) {
       return this.operator.output;
+    } else if (this.target) {
+      return this.target.value;
     } else {
       return undefined;
     }
