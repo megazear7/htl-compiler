@@ -8,15 +8,28 @@ export default class Tag {
     this.compiler = compiler;
   }
 
+  isRendered() {
+    // TODO: Also look for and evaluate data-sly-test attributes
+    return this.entry.name != 'sly';
+  }
+
   compile() {
     let output = '';
 
-    output += '<' + this.entry.name;
+    if (this.isRendered()) {
+      output += '<' + this.entry.name;
+    }
 
-    Object.keys(this.entry.attribs).forEach(attr =>
-      output += new Attr(attr, this.entry.attribs[attr], this.compiler).compile());
+    Object.keys(this.entry.attribs).forEach(attr => {
+      const attrResult = new Attr(attr, this.entry.attribs[attr], this.compiler).compile();
+      if (this.isRendered()) {
+        output += attrResult;
+      }
+    });
 
-    output += '>';
+    if (this.isRendered()) {
+      output += '>';
+    }
 
     if (this.compiler.unusedList) {
       const unusedList = this.compiler.unusedList;
@@ -32,7 +45,9 @@ export default class Tag {
         output += new Entry(child, this.compiler).compile());
     }
 
-    output += '</' + this.entry.name + '>';
+    if (this.isRendered()) {
+      output += '</' + this.entry.name + '>';
+    }
 
     return output;
   }
