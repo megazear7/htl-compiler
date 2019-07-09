@@ -1,5 +1,6 @@
 import DataSlyUse from './data-sly-use.js';
 import DataSlyList from './data-sly-list.js';
+import { expressionMatch } from './globals.js';
 
 export default class Attr {
   constructor(name, value, compiler) {
@@ -20,5 +21,24 @@ export default class Attr {
     }
 
     return output;
+  }
+
+  computeValue() {
+    let value = undefined;
+    const matches = expressionMatch.exec(this.value);
+
+    if (matches && matches.length >= 1) {
+      const expression = matches[1];
+      value = this.compiler.resourceData;
+      expression.split('.').forEach(identifier => {
+        if (typeof value === 'object') {
+          value = value[identifier];
+        } else {
+          value = undefined;
+        }
+      });
+    }
+
+    return value;
   }
 }

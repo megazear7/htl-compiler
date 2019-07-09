@@ -9,25 +9,33 @@ export default class Tag {
   }
 
   isRendered() {
-    // TODO: Also look for and evaluate data-sly-test attributes
-    return this.entry.name != 'sly';
+    let isRendered = this.entry.name != 'sly';
+    Object.keys(this.entry.attribs).forEach(attr => {
+      if (attr.startsWith('data-sly-test')) {
+        if (! new Attr(attr, this.entry.attribs[attr], this.compiler).computeValue()) {
+          isRendered = false;
+        }
+      }
+    });
+    return isRendered;
   }
 
   compile() {
     let output = '';
+    const isRendered = this.isRendered();
 
-    if (this.isRendered()) {
+    if (isRendered) {
       output += '<' + this.entry.name;
     }
 
     Object.keys(this.entry.attribs).forEach(attr => {
       const attrResult = new Attr(attr, this.entry.attribs[attr], this.compiler).compile();
-      if (this.isRendered()) {
+      if (isRendered) {
         output += attrResult;
       }
     });
 
-    if (this.isRendered()) {
+    if (isRendered) {
       output += '>';
     }
 
@@ -37,15 +45,18 @@ export default class Tag {
 
       unusedList.list.forEach(item => {
         this.compiler.resourceData[unusedList.handle] = item;
-        this.entry.children.forEach(child =>
-          output += new Entry(child, this.compiler).compile());
+        this.entry.children.forEach(child => {
+          if (isRendered) {
+            output += new Entry(child, this.compiler).compile()
+          }
+        });
       });
     } else {
       this.entry.children.forEach(child =>
         output += new Entry(child, this.compiler).compile());
     }
 
-    if (this.isRendered()) {
+    if (isRendered) {
       output += '</' + this.entry.name + '>';
     }
 

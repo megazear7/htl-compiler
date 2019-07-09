@@ -6,6 +6,7 @@
       }
     }
   },
+  "isCool": false,
   "hello": "world",
   "items": [
     "AAA",
