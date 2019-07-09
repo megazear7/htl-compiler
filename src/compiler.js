@@ -1,5 +1,7 @@
 import htmlparser from 'htmlparser2';
 
+const expressionMatch = /\$\{(.*)\}/g;
+
 export default class Compiler {
   constructor(template, resourceData, useModels, resourceTypes) {
     this.template = template;
@@ -16,7 +18,7 @@ export default class Compiler {
         output += '<' + tagname + '>';
     	},
     	ontext: text => {
-        output += text;
+        output += text.replace(expressionMatch, (a, b) => this.resourceData[b]);
     	},
     	onclosetag: tagname => {
         output += '</' + tagname + '>';
