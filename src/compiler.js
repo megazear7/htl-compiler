@@ -2,8 +2,6 @@ import htmlparser from 'htmlparser2';
 import Attr from './attr.js';
 import Text from './text.js';
 
-const expressionMatch = /\$\{(.*)\}/g;
-
 export default class Compiler {
   constructor(template, resourceData, useModels, resourceTypes) {
     this.template = template;

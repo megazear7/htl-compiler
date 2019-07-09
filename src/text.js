@@ -1,4 +1,4 @@
-const expressionMatch = /\$\{(.*)\}/g;
+import { expressionMatch } from './globals.js';
 
 export default class Attr {
   constructor(text, compiler) {
