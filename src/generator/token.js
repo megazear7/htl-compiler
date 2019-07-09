@@ -61,6 +61,14 @@ export default class Token {
       return '';
     } else if (this.variableName) {
       return this.context[this.variableName] ? this.context[this.variableName] : '';
+    } else if (this.expression && this.type === 'Start') {
+      if (this.expression.value === false) {
+        // TODO
+        // This expression plus type == "Start" scenario seems like the only way to know that we are in the "data-sly-test" scenario.
+        // However it cause infinite loops sometimes and breaks the data-sly-use other times.
+        //this.tokenList.goTo(this.endToken.index+1);
+      }
+      return '';
     } else if (this.expression) {
       return '';
     } else {

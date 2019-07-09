@@ -4,12 +4,13 @@ import Arg from './arg.js';
 import Operator from './operator.js';
 
 export default class Expression {
-  constructor({_hasParens, _functionName, _text, _name, _target, _property, _operator, _operands, _args, _expression}, context) {
+  constructor({_hasParens, _functionName, _text, _name, _value, _target, _property, _operator, _operands, _args, _expression}, context) {
     this.hasParens = _hasParens;
     this.functionName = _functionName;
     this.context = context;
     this.text = _text;
     this.name = _name;
+    this.valueProp = _value;
 
     if (_operator) this.operator = new Operator(_operator.sym, _operands, _target, context);
     if (_target) this.target = new Target(_target, context);
@@ -31,6 +32,8 @@ export default class Expression {
       return this.operator.output;
     } else if (this.target) {
       return this.target.value;
+    } else if (typeof this.valueProp !== 'undefined') {
+      return this.valueProp;
     } else {
       return undefined;
     }
