@@ -1,6 +1,5 @@
 import htmlparser from 'htmlparser2';
-import Attr from './attr.js';
-import Text from './text.js';
+import Entry from './entry.js';
 
 export default class Compiler {
   constructor(template, resourceData, useModels, resourceTypes) {
@@ -13,25 +12,17 @@ export default class Compiler {
   compile() {
     let output = '';
 
-    const parser = new htmlparser.Parser({
-    	onopentag: (tagname, attribs) => {
-        output += '<' + tagname;
-
-        Object.keys(attribs).forEach(attr =>
-          output += new Attr(attr, attribs[attr], this).compile());
-
-        output += '>';
-    	},
-    	ontext: text => {
-        output += new Text(text, this).compile();
-    	},
-    	onclosetag: tagname => {
-        output += '</' + tagname + '>';
-    	}
-    }, {
-      decodeEntities: true,
-      lowerCaseAttributeNames: false
+    var handler = new htmlparser.DomHandler(function (error, dom) {
+      if (error) {
+        console.log(error);
+      } else {
+        dom.forEach(entry => {
+          output += new Entry(entry, this).compile();
+        });
+      }
     });
+
+    const parser = new htmlparser.Parser(handler);
 
     parser.write(this.template);
     parser.end();
