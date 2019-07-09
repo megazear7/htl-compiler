@@ -15,15 +15,44 @@ export default class Compiler {
 
     const parser = new htmlparser.Parser({
     	onopentag: (tagname, attribs) => {
-        output += '<' + tagname + '>';
+        output += '<' + tagname;
+
+        Object.keys(attribs).forEach(attr => {
+          if (attr.startsWith('data-sly-use')) {
+            const handle = attr.split('\.')[1];
+            const matches = expressionMatch.exec(attribs[attr]);
+
+            if (matches && matches.length >= 1) {
+              const classPath = [1];
+              this.resourceData[handle] = this.useModels[classPath];
+            }
+          } else {
+            output += ' ' + attr + '="' + attribs[attr] + '"';
+          }
+        });
+
+        output += '>';
     	},
     	ontext: text => {
-        output += text.replace(expressionMatch, (a, b) => this.resourceData[b]);
+        output += text.replace(expressionMatch, (a, b) => {
+          let value = this.resourceData;
+          b.split('.').forEach(identifier => {
+            if (typeof value === 'object') {
+              value = value[identifier];
+            } else {
+              value = '';
+            }
+          });
+          return value
+        });
     	},
     	onclosetag: tagname => {
         output += '</' + tagname + '>';
     	}
-    }, { decodeEntities: true });
+    }, {
+      decodeEntities: true,
+      lowerCaseAttributeNames: false
+    });
 
     parser.write(this.template);
     parser.end();
