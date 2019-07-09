@@ -16,14 +16,15 @@ export default class DataSlyList {
     if (matches && matches.length >= 1) {
       const expression = matches[1];
       let list = this.compiler.resourceData;
-      expression.split('.').forEach(identifier => {
-        if (typeof value === 'object') {
-          list = value[identifier];
+      expression.split('.').reverse().forEach(identifier => {
+        if (typeof list === 'object') {
+          list = list[identifier];
         } else {
           list = [];
         }
       });
-      // TODO: Now what do we do with "handle" and "list"???
+
+      this.compiler.addUnusedList({ handle, list });
     }
 
     return output;

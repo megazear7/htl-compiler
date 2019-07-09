@@ -12,7 +12,7 @@ export default class Compiler {
   compile() {
     let output = '';
 
-    var handler = new htmlparser.DomHandler(function (error, dom) {
+    var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         console.log(error);
       } else {
@@ -28,5 +28,9 @@ export default class Compiler {
     parser.end();
 
     return output;
+  }
+
+  addUnusedList({ handle, list }) {
+    this.unusedList = { handle, list };
   }
 }
