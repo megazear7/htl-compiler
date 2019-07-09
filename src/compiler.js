@@ -1,5 +1,6 @@
 import htmlparser from 'htmlparser2';
 import Attr from './attr.js';
+import Text from './text.js';
 
 const expressionMatch = /\$\{(.*)\}/g;
 
@@ -24,17 +25,7 @@ export default class Compiler {
         output += '>';
     	},
     	ontext: text => {
-        output += text.replace(expressionMatch, (a, b) => {
-          let value = this.resourceData;
-          b.split('.').forEach(identifier => {
-            if (typeof value === 'object') {
-              value = value[identifier];
-            } else {
-              value = '';
-            }
-          });
-          return value;
-        });
+        output += new Text(text, this).compile();
     	},
     	onclosetag: tagname => {
         output += '</' + tagname + '>';
