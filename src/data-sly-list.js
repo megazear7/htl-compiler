@@ -24,7 +24,7 @@ export default class DataSlyList {
         }
       });
 
-      this.compiler.addUnusedList({ handle, list });
+      this.compiler.addUnusedList({ handle: handle || 'item', list });
     }
 
     return output;
