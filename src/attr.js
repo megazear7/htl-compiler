@@ -1,4 +1,4 @@
-import { expressionMatch } from './globals.js';
+import Use from './use.js';
 
 export default class Attr {
   constructor(name, value, compiler) {
@@ -11,13 +11,7 @@ export default class Attr {
     let output = '';
 
     if (this.name.startsWith('data-sly-use')) {
-      const handle = this.name.split('\.')[1];
-      const matches = expressionMatch.exec(this.value);
-
-      if (matches && matches.length >= 1) {
-        const classPath = matches[1];
-        this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
-      }
+      output += new Use(this.name, this.value, this.compiler).compile();
     } else {
       output += ' ' + this.name + '="' + this.value + '"';
     }
