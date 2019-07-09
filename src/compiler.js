@@ -1,4 +1,5 @@
 import htmlparser from 'htmlparser2';
+import Attr from './attr.js';
 
 const expressionMatch = /\$\{(.*)\}/g;
 
@@ -17,19 +18,8 @@ export default class Compiler {
     	onopentag: (tagname, attribs) => {
         output += '<' + tagname;
 
-        Object.keys(attribs).forEach(attr => {
-          if (attr.startsWith('data-sly-use')) {
-            const handle = attr.split('\.')[1];
-            const matches = expressionMatch.exec(attribs[attr]);
-
-            if (matches && matches.length >= 1) {
-              const classPath = [1];
-              this.resourceData[handle] = this.useModels[classPath];
-            }
-          } else {
-            output += ' ' + attr + '="' + attribs[attr] + '"';
-          }
-        });
+        Object.keys(attribs).forEach(attr =>
+          output += new Attr(attr, attribs[attr], this).compile());
 
         output += '>';
     	},
@@ -43,7 +33,7 @@ export default class Compiler {
               value = '';
             }
           });
-          return value
+          return value;
         });
     	},
     	onclosetag: tagname => {
