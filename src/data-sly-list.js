@@ -1,6 +1,6 @@
 import { expressionMatch } from './globals.js';
 
-export default class Use {
+export default class DataSlyList {
   constructor(name, value, compiler) {
     this.name = name;
     this.value = value;
@@ -14,8 +14,16 @@ export default class Use {
     const matches = expressionMatch.exec(this.value);
 
     if (matches && matches.length >= 1) {
-      const classPath = matches[1];
-      this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
+      const expression = matches[1];
+      let list = this.compiler.resourceData;
+      expression.split('.').forEach(identifier => {
+        if (typeof value === 'object') {
+          list = value[identifier];
+        } else {
+          list = [];
+        }
+      });
+      // TODO: Now what do we do with "handle" and "list"???
     }
 
     return output;
