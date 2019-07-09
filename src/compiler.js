@@ -22,7 +22,7 @@ export default class Compiler {
       }
     });
 
-    const parser = new htmlparser.Parser(handler);
+    const parser = new htmlparser.Parser(handler, { lowerCaseAttributeNames: false });
 
     parser.write(this.template);
     parser.end();

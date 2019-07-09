@@ -16,7 +16,7 @@ export default class DataSlyList {
     if (matches && matches.length >= 1) {
       const expression = matches[1];
       let list = this.compiler.resourceData;
-      expression.split('.').reverse().forEach(identifier => {
+      expression.split('.').forEach(identifier => {
         if (typeof list === 'object') {
           list = list[identifier];
         } else {
