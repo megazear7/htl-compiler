@@ -17,10 +17,20 @@ export default class Attr {
     } else if (this.name.startsWith('data-sly-list')) {
       output += new DataSlyList(this.name, this.value, this.compiler).compile();
     } else {
-      output += ' ' + this.name + '="' + this.value + '"';
+      output += ' ' + this.name + '="' + this.getAttributeValue() + '"';
     }
 
     return output;
+  }
+
+  getAttributeValue() {
+    const expressionValue = this.computeValue();
+
+    if (expressionValue != undefined) {
+      return expressionValue;
+    } else {
+      return this.value;
+    }
   }
 
   computeValue() {
