@@ -9,7 +9,8 @@ export default class Tag {
   }
 
   isRendered() {
-    let isRendered = this.entry.name != 'sly';
+    let isRendered = this.getElementName() != 'sly';
+
     Object.keys(this.entry.attribs).forEach(attr => {
       if (attr.startsWith('data-sly-test')) {
         if (! new Attr(attr, this.entry.attribs[attr], this.compiler).computeValue()) {
@@ -17,7 +18,20 @@ export default class Tag {
         }
       }
     });
+
     return isRendered;
+  }
+
+  getElementName() {
+    let elementName = this.entry.name;
+
+    Object.keys(this.entry.attribs).forEach(attr => {
+      if (attr.startsWith('data-sly-element')) {
+        elementName = new Attr(attr, this.entry.attribs[attr], this.compiler).getAttributeValue();
+      }
+    });
+
+    return elementName;
   }
 
   compile() {
@@ -25,7 +39,7 @@ export default class Tag {
     const isRendered = this.isRendered();
 
     if (isRendered) {
-      output += '<' + this.entry.name;
+      output += '<' + this.getElementName();
     }
 
     Object.keys(this.entry.attribs).forEach(attr => {
@@ -57,7 +71,7 @@ export default class Tag {
     }
 
     if (isRendered) {
-      output += '</' + this.entry.name + '>';
+      output += '</' + this.getElementName() + '>';
     }
 
     return output;

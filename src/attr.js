@@ -16,6 +16,8 @@ export default class Attr {
       output += new DataSlyUse(this.name, this.value, this.compiler).compile();
     } else if (this.name.startsWith('data-sly-list')) {
       output += new DataSlyList(this.name, this.value, this.compiler).compile();
+    } else if (this.name.startsWith('data-sly-element')) {
+      // Don't output anything
     } else {
       output += ' ' + this.name + '="' + this.getAttributeValue() + '"';
     }
