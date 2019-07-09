@@ -35,7 +35,7 @@ export default class Attr {
 
   computeValue() {
     let value = undefined;
-    const matches = expressionMatch.exec(this.value);
+    const matches = new RegExp(expressionMatch).exec(this.value);
 
     if (matches && matches.length >= 1) {
       const expression = matches[1];

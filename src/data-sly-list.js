@@ -11,7 +11,7 @@ export default class DataSlyList {
     let output = '';
 
     const handle = this.name.split('\.')[1];
-    const matches = expressionMatch.exec(this.value);
+    const matches = new RegExp(expressionMatch).exec(this.value);
 
     if (matches && matches.length >= 1) {
       const expression = matches[1];

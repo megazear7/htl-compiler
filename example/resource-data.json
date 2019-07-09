@@ -1,9 +1,7 @@
 {
   "exampleGlobalValue": {
     "nested": {
-      "deeplyNested": {
-        "deeper": "Hello"
-      }
+      "deeplyNested": "hello"
     }
   },
   "isCool": false,
@@ -12,5 +10,6 @@
     "AAA",
     "BBB",
     "CCC"
-  ]
+  ],
+  "anotherValue": "some other value"
 }

@@ -7,7 +7,7 @@ export default class Attr {
   }
 
   compile() {
-    return this.text.replace(expressionMatch, (a, b) => {
+    return this.text.replace(new RegExp(expressionMatch), (a, b) => {
       let value = this.compiler.resourceData;
       b.split('.').forEach(identifier => {
         if (typeof value === 'object') {
