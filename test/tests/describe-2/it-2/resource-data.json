@@ -1,3 +1,5 @@
 {
-  "exampleGlobalValue": "Example global value"
+  "exampleGlobalValue": "Example global value",
+  "firstName": "Joe",
+  "lastName": "Smith"
 }

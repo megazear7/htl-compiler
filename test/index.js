@@ -14,7 +14,12 @@ fs.readdirSync(path.resolve(__dirname, `./tests`)).forEach(describeDir => {
 
         let itConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, 'config.json'), 'utf-8'));
         let resourceData = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `resource-data.json`), 'utf-8'));
-        let useModels = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `use-models.json`), 'utf-8'));
+        let useModels = { };
+        if (fs.existsSync(path.resolve(__dirname, 'tests', describeDir, itDir, `use-models.json`))) {
+          useModels = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `use-models.json`), 'utf-8'));
+        } else {
+          useModels = require(path.resolve(__dirname, 'tests', describeDir, itDir, `use-models.js`)).default;
+        }
         let resourceTypes = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `resources.json`), 'utf-8'));
 
         Object.keys(resourceTypes).forEach(key => {

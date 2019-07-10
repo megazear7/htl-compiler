@@ -47,6 +47,8 @@ new Compiler(
 
 ## Usage
 
+#### Expressions
+
 Here is a simple hello world example:
 
 ```js
@@ -64,7 +66,9 @@ const compiledHtml = new Compiler(exampleHtml, resourceData).compile();
 // This will produce <div>Hello, World!</div>
 ```
 
-Here is an example using "use models":
+#### Use models
+
+Here is an example using use models:
 
 ```js
 import Compiler from './src/compiler.js';
@@ -88,6 +92,27 @@ const compiledHtml = new Compiler(exampleHtml, resourceData, useModels).compile(
 // This will produce <div>Hello from TestModel</div>
 ```
 
+```js
+class MyClass {
+  constructor(context) {
+    this.name = context.firstName + " " + context.lastName;
+  }
+
+  name() {
+    return this.name;
+  }
+}
+
+new Compiler(`
+  <sly data-sly-use.example="some.example.class.path.MyClass">
+  <div>\${example.name}</div>
+  `,
+  { firstName: 'Joe', lastName: 'Smith' },
+  { 'some.example.class.path.MyClass': MyClass }
+).compile()
+```
+
+#### Resources
 Here is an example using resources:
 
 ```js
@@ -131,7 +156,7 @@ TODO
 npm test
 ```
 
-26 passing
+27 passing
 0 failing
 
 #### Create new empty test
