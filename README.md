@@ -15,7 +15,7 @@ const resourceData = {
   myMessage: "Hello, World!"
 }
 
-const compiledHtml = new Compiler(exampleHtml, resourceData, { }, { }).compile();
+const compiledHtml = new Compiler(exampleHtml, resourceData).compile();
 // This will produce <div>Hello, World!</div>
 ```
 
@@ -39,7 +39,7 @@ const useModels = {
   }
 }
 
-const compiledHtml = new Compiler(exampleHtml, resourceData, useModels, { }).compile();
+const compiledHtml = new Compiler(exampleHtml, resourceData, useModels).compile();
 // This will produce <div>Hello from TestModel</div>
 ```
 
