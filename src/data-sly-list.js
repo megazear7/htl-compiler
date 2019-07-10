@@ -13,18 +13,11 @@ export default class DataSlyList {
     const handle = this.name.getSlyIdentifier();
     const matches = new RegExp(expressionMatch).exec(this.value);
 
-    if (matches && matches.length >= 1) {
-      const expression = matches[1];
-      let list = this.compiler.resourceData;
-      expression.split('.').forEach(identifier => {
-        if (typeof list === 'object') {
-          list = list[identifier];
-        } else {
-          list = [];
-        }
+    if (this.value.hasExpression()) {
+      this.compiler.addUnusedList({
+        handle: handle || 'item',
+        list: this.value.getComputedValue()
       });
-
-      this.compiler.addUnusedList({ handle: handle || 'item', list });
     }
 
     return output;

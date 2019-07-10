@@ -18,9 +18,9 @@ export default class DataSlyUse {
 
     const matches = new RegExp(expressionMatch).exec(this.value);
 
-    let classPath = this.value;
-    if (matches && matches.length >= 1) {
-      classPath = matches[1];
+    let classPath = this.value.getValue();
+    if (this.value.hasExpression()) {
+      classPath = this.value.getExpression();
     }
 
     this.compiler.resourceData[handle] = this.compiler.useModels[classPath];

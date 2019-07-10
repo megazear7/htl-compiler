@@ -2,12 +2,12 @@ import DataSlyUse from './data-sly-use.js';
 import DataSlyList from './data-sly-list.js';
 import DataSlyText from './data-sly-text.js';
 import AttrName from './attr-name.js';
-import { expressionMatch } from './globals.js';
+import AttrValue from './attr-value.js';
 
 export default class Attr {
   constructor(name, value, compiler) {
     this.name = new AttrName(name);
-    this.value = value;
+    this.value = new AttrValue(value, compiler);
     this.compiler = compiler;
   }
 
@@ -23,38 +23,9 @@ export default class Attr {
     } else if (this.name.isSlyElement()) {
       // Don't output anything
     } else {
-      output += ' ' + this.name.getStandardName() + '="' + this.getAttributeValue() + '"';
+      output += ' ' + this.name.getStandardName() + '="' + this.value.getValue() + '"';
     }
 
     return output;
-  }
-
-  getAttributeValue() {
-    const expressionValue = this.computeValue();
-
-    if (expressionValue != undefined) {
-      return expressionValue;
-    } else {
-      return this.value;
-    }
-  }
-
-  computeValue() {
-    let value = undefined;
-    const matches = new RegExp(expressionMatch).exec(this.value);
-
-    if (matches && matches.length >= 1) {
-      const expression = matches[1];
-      value = this.compiler.resourceData;
-      expression.split('.').forEach(identifier => {
-        if (typeof value === 'object') {
-          value = value[identifier];
-        } else {
-          value = undefined;
-        }
-      });
-    }
-
-    return value;
   }
 }

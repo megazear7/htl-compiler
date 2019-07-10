@@ -15,7 +15,7 @@ export default class Tag {
     Object.keys(this.entry.attribs).forEach(attrStr => {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if (attrName.isSlyTest() && ! attr.computeValue()) {
+      if (attrName.isSlyTest() && ! attr.value.getComputedValue()) {
         isRendered = false;
       }
     });
@@ -30,7 +30,7 @@ export default class Tag {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
       if (attrName.isSlyElement()) {
-        elementName = attr.getAttributeValue();
+        elementName = attr.value.getValue();
       }
     });
 

@@ -12,20 +12,10 @@ export default class DataSlyText {
 
     const matches = new RegExp(expressionMatch).exec(this.value);
 
-    if (matches && matches.length >= 1) {
-      const expression = matches[1];
-      let value = this.compiler.resourceData;
-      expression.split('.').forEach(identifier => {
-        if (typeof value === 'object') {
-          value = value[identifier];
-        } else {
-          value = [];
-        }
-      });
-
-      this.compiler.addUnusedText({ value });
+    if (this.value.hasExpression()) {
+      this.compiler.addUnusedText({ value: this.value.getComputedValue() });
     } else {
-      this.compiler.addUnusedText({ value: this.value });
+      this.compiler.addUnusedText({ value: this.value.getValue() });
     }
 
     return output;
