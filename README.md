@@ -8,7 +8,7 @@ Here is a simple hello world example:
 import Compiler from './src/compiler.js';
 
 const exampleHtml = `
-  <div>${myMessage}</div>
+  <div>\${myMessage}</div>
 `;
 
 const resourceData = {
@@ -26,7 +26,7 @@ import Compiler from './src/compiler.js';
 
 const exampleHtml = `
   <sly data-sly-use.test="\${my.example.class.path.TestModel}"
-  <div>${test.messageFromTestModel}</div>
+  <div>\${test.messageFromTestModel}</div>
 `;
 
 const resourceData = {
