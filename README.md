@@ -40,7 +40,7 @@ new Compiler(
     "class.path.of.use.Model": { /* Data you want this use model to provide */ }
   },
   {
-    "sampleResource": "The template for the sampleResource"
+    "sampleResource": "<div>The template for the sampleResource. It will only have a subset of the data available to it.</div>"
   }
 ).compile();
 ```
