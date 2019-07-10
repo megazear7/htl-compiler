@@ -5,8 +5,8 @@
   "main": "index.js",
   "repository": "https://github.com/megazear7/htl-compiler",
   "scripts": {
-    "example:browser": "node serve.js",
-    "example:cli": "node index.js",
+    "example:browser": "node ./examples/browser/serve.js",
+    "example:cli": "node ./examples/cli/example.js",
     "test": "nyc mocha",
     "test:create:it": "node ./create-test-it.js",
     "test:create:describe": "node ./create-test-describe.js"
