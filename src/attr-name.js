@@ -32,6 +32,10 @@ export default class AttrName {
     return this.isSlyAttr() && this.getSlyName() === 'data-sly-list';
   }
 
+  isSlyAttribute() {
+    return this.isSlyAttr() && this.getSlyName() === 'data-sly-attribute';
+  }
+
   getSlyName() {
     return this.isSlyAttr() ? this.parts[0] : undefined;
   }
