@@ -65,6 +65,10 @@ export default class Tag {
           }
         });
       });
+    } else if (this.compiler.unusedText) {
+      const unusedText = this.compiler.unusedText;
+      this.compiler.unusedText = undefined;
+      output += unusedText.value;
     } else {
       this.entry.children.forEach(child =>
         output += new Entry(child, this.compiler).compile());

@@ -1,5 +1,6 @@
 import DataSlyUse from './data-sly-use.js';
 import DataSlyList from './data-sly-list.js';
+import DataSlyText from './data-sly-text.js';
 import { expressionMatch } from './globals.js';
 
 export default class Attr {
@@ -16,6 +17,8 @@ export default class Attr {
       output += new DataSlyUse(this.name, this.value, this.compiler).compile();
     } else if (this.name.startsWith('data-sly-list')) {
       output += new DataSlyList(this.name, this.value, this.compiler).compile();
+    } else if (this.name.startsWith('data-sly-text')) {
+      output += new DataSlyText(this.name, this.value, this.compiler).compile();
     } else if (this.name.startsWith('data-sly-element')) {
       // Don't output anything
     } else {

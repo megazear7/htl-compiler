@@ -33,4 +33,8 @@ export default class Compiler {
   addUnusedList({ handle, list }) {
     this.unusedList = { handle, list };
   }
+
+  addUnusedText({ value }) {
+    this.unusedText = { value };
+  }
 }
