@@ -1,0 +1,3 @@
+{
+  "it": "Contents should not be rendered when the expression evaluates to false"
+}

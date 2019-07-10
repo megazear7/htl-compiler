@@ -7,6 +7,7 @@ export default class Compiler {
     this.resourceData = resourceData;
     this.useModels = useModels;
     this.resourceTypes = resourceTypes;
+    this.templates = [ ];
   }
 
   compile() {
@@ -40,5 +41,13 @@ export default class Compiler {
 
   setUnusedResource({ type, data }) {
     this.unusedResource = { type, data };
+  }
+
+  addUnusedTemplate({ handler }) {
+    this.unusedTemplate = { handler };
+  }
+
+  addUncompiledTemplate({ entries }) {
+    this.uncompiledTemplate = { entries };
   }
 }

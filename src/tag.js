@@ -9,13 +9,27 @@ export default class Tag {
     this.compiler = compiler;
   }
 
+  isContentRendered() {
+    let isContentRendered = true;
+
+    Object.keys(this.entry.attribs).forEach(attrStr => {
+      const attrName = new AttrName(attrStr);
+      const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
+      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
+        isContentRendered = false;
+      }
+    });
+
+    return isContentRendered;
+  }
+
   isRendered() {
     let isRendered = this.getElementName() != 'sly';
 
     Object.keys(this.entry.attribs).forEach(attrStr => {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if (attrName.isSlyTest() && ! attr.value.getComputedValue()) {
+      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
         isRendered = false;
       }
     });
@@ -80,9 +94,19 @@ export default class Tag {
       const unusedResource = this.compiler.unusedResource;
       this.compiler.unusedResource = undefined;
       output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compile();
+    } else if (this.compiler.unusedTemplate) {
+      const unusedTemplate = this.compiler.unusedTemplate;
+      this.compiler.unusedTemplate = undefined;
+      this.compiler.templates[unusedTemplate.handler] = { entry: this.entry };
+    } else if (this.compiler.uncompiledTemplate) {
+      const uncompiledTemplate = this.compiler.uncompiledTemplate;
+      this.compiler.uncompiledTemplate = undefined;
+      uncompiledTemplate.entries.forEach(entry => output += entry.compile());
     } else {
-      this.entry.children.forEach(child =>
-        output += new Entry(child, this.compiler).compile());
+      if (this.isContentRendered()) {
+        this.entry.children.forEach(child =>
+          output += new Entry(child, this.compiler).compile());
+      }
     }
 
     if (isRendered && (! unusedList || ! unusedList.repeatContainer)) {

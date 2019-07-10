@@ -40,6 +40,14 @@ export default class AttrName {
     return this.isSlyAttr() && this.getSlyName() === 'data-sly-resource';
   }
 
+  isSlyTemplate() {
+    return this.isSlyAttr() && this.getSlyName() === 'data-sly-template';
+  }
+
+  isSlyCall() {
+    return this.isSlyAttr() && this.getSlyName() === 'data-sly-call';
+  }
+
   isSlyAttribute() {
     return this.isSlyAttr() && this.getSlyName() === 'data-sly-attribute';
   }
