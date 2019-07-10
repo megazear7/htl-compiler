@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Example of using HTL JS compiler</title>
     <script type="module">
-      // TODO While our code is written in ES6 modules it uses htlengine which is in CJS
-      // and so this does not work.
       import Compiler from './src/compiler.js';
       let exampleHtml = '<h1>${test}</h1>';
       let resourceData = { test: 'Hello, World!' };
