@@ -10,7 +10,6 @@ export default class DataSlyText {
   compile() {
     let output = '';
 
-    const handle = this.name.split('\.')[1];
     const matches = new RegExp(expressionMatch).exec(this.value);
 
     if (matches && matches.length >= 1) {

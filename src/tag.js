@@ -1,5 +1,6 @@
 import htmlparser from 'htmlparser2';
 import Attr from './attr.js';
+import AttrName from './attr-name.js';
 import Entry from './entry.js';
 
 export default class Tag {
@@ -11,11 +12,11 @@ export default class Tag {
   isRendered() {
     let isRendered = this.getElementName() != 'sly';
 
-    Object.keys(this.entry.attribs).forEach(attr => {
-      if (attr.startsWith('data-sly-test')) {
-        if (! new Attr(attr, this.entry.attribs[attr], this.compiler).computeValue()) {
-          isRendered = false;
-        }
+    Object.keys(this.entry.attribs).forEach(attrStr => {
+      const attrName = new AttrName(attrStr);
+      const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
+      if (attrName.isSlyTest() && ! attr.computeValue()) {
+        isRendered = false;
       }
     });
 
@@ -25,9 +26,11 @@ export default class Tag {
   getElementName() {
     let elementName = this.entry.name;
 
-    Object.keys(this.entry.attribs).forEach(attr => {
-      if (attr.startsWith('data-sly-element')) {
-        elementName = new Attr(attr, this.entry.attribs[attr], this.compiler).getAttributeValue();
+    Object.keys(this.entry.attribs).forEach(attrStr => {
+      const attrName = new AttrName(attrStr);
+      const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
+      if (attrName.isSlyElement()) {
+        elementName = attr.getAttributeValue();
       }
     });
 

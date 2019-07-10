@@ -1,11 +1,12 @@
 import DataSlyUse from './data-sly-use.js';
 import DataSlyList from './data-sly-list.js';
 import DataSlyText from './data-sly-text.js';
+import AttrName from './attr-name.js';
 import { expressionMatch } from './globals.js';
 
 export default class Attr {
   constructor(name, value, compiler) {
-    this.name = name;
+    this.name = new AttrName(name);
     this.value = value;
     this.compiler = compiler;
   }
@@ -13,16 +14,16 @@ export default class Attr {
   compile() {
     let output = '';
 
-    if (this.name.startsWith('data-sly-use')) {
+    if (this.name.isSlyUse()) {
       output += new DataSlyUse(this.name, this.value, this.compiler).compile();
-    } else if (this.name.startsWith('data-sly-list')) {
+    } else if (this.name.isSlyList()) {
       output += new DataSlyList(this.name, this.value, this.compiler).compile();
-    } else if (this.name.startsWith('data-sly-text')) {
+    } else if (this.name.isSlyText()) {
       output += new DataSlyText(this.name, this.value, this.compiler).compile();
-    } else if (this.name.startsWith('data-sly-element')) {
+    } else if (this.name.isSlyElement()) {
       // Don't output anything
     } else {
-      output += ' ' + this.name + '="' + this.getAttributeValue() + '"';
+      output += ' ' + this.name.getStandardName() + '="' + this.getAttributeValue() + '"';
     }
 
     return output;

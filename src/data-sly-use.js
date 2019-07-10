@@ -10,7 +10,12 @@ export default class DataSlyUse {
   compile() {
     let output = '';
 
-    const handle = this.name.split('\.')[1];
+    const handle = this.name.getSlyIdentifier();
+
+    if (typeof handle === 'undefined') {
+      throw "data-sly-use must have an identifier";
+    }
+
     const matches = new RegExp(expressionMatch).exec(this.value);
 
     let classPath = this.value;
