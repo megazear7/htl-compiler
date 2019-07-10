@@ -2,7 +2,7 @@ import htmlparser from 'htmlparser2';
 import Entry from './entry.js';
 
 export default class Compiler {
-  constructor(template, resourceData, useModels, resourceTypes) {
+  constructor(template = '', resourceData = { }, useModels = { }, resourceTypes = { }) {
     this.template = template;
     this.resourceData = resourceData;
     this.useModels = useModels;
