@@ -4,12 +4,5 @@
       "deeplyNested": "hello"
     }
   },
-  "isCool": false,
-  "hello": "world",
-  "items": [
-    "AAA",
-    "BBB",
-    "CCC"
-  ],
   "anotherValue": "some other value"
 }

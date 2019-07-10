@@ -6,6 +6,9 @@
 npm test
 ```
 
+16 passing
+6 failing
+
 #### Create new empty test
 
 ```

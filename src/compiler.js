@@ -1,5 +1,5 @@
-import TokenList from './generator/token-list.js';
-const TemplateParser = require('../node_modules/@adobe/htlengine/src/parser/html/TemplateParser.js');
+import htmlparser from 'htmlparser2';
+import Entry from './entry.js';
 
 export default class Compiler {
   constructor(template, resourceData, useModels, resourceTypes) {
@@ -10,13 +10,31 @@ export default class Compiler {
   }
 
   compile() {
-    const tokenList = new TemplateParser().parse(this.template);
+    let output = '';
 
-    return new TokenList(
-      tokenList,
-      this.resourceData,
-      this.useModels,
-      this.resourceTypes
-    ).output;
+    var handler = new htmlparser.DomHandler((error, dom) => {
+      if (error) {
+        console.log(error);
+      } else {
+        dom.forEach(entry => {
+          output += new Entry(entry, this).compile();
+        });
+      }
+    });
+
+    const parser = new htmlparser.Parser(handler, { lowerCaseAttributeNames: false });
+
+    parser.write(this.template);
+    parser.end();
+
+    return output;
+  }
+
+  addUnusedList({ handle, list }) {
+    this.unusedList = { handle, list };
+  }
+
+  addUnusedText({ value }) {
+    this.unusedText = { value };
   }
 }

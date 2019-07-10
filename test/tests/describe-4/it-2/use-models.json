@@ -6,11 +6,6 @@
     },
   "some.path.to.a.java.FooClass":
     {
-      "example": "I am from FooClass",
-      "myList": [
-        "one",
-        "two",
-        "three"
-      ]
+      "example": "I am from FooClass"
     }
 }

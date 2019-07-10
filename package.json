@@ -24,5 +24,7 @@
     "mocha": "^6.0.1",
     "nyc": "^13.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "htmlparser2": "^3.10.1"
+  }
 }
