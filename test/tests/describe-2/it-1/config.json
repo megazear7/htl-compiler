@@ -1,3 +1,3 @@
 {
-  "it": "should work along side data-sly-resource"
+  "it": "should get data from a use model"
 }
