@@ -1,2 +1,3 @@
-<template data-sly-template.one>This is the template</template>
-<div data-sly-call="${one}"></div>
+<sly data-sly-use.person="${some.class.path.MyClass}">
+  <div>${person.name}</div>
+</sly>

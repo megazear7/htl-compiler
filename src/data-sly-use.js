@@ -19,8 +19,25 @@ export default class DataSlyUse {
       classPath = this.value.getExpression();
     }
 
-    this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
+    if (isClass(this.compiler.useModels[classPath])) {
+      this.compiler.resourceData[handle] = new this.compiler.useModels[classPath](this.compiler.resourceData);
+      console.log(this.compiler.resourceData[handle]);
+    } else {
+      this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
+    }
 
     return output;
   }
+}
+
+export function isClass(obj) {
+  const isCtorClass = obj.constructor
+      && obj.constructor.toString().substring(0, 5) === 'class'
+  if(obj.prototype === undefined) {
+    return isCtorClass
+  }
+  const isPrototypeCtorClass = obj.prototype.constructor
+    && obj.prototype.constructor.toString
+    && obj.prototype.constructor.toString().substring(0, 5) === 'class'
+  return isCtorClass || isPrototypeCtorClass
 }

@@ -29,6 +29,10 @@ export default class Expression {
       }
     });
 
+    if (isFunction(value)) {
+      value = value();
+    }
+
     return value;
   }
 }
@@ -36,4 +40,8 @@ export default class Expression {
 Expression.calculateEachMatch = function(str, compiler) {
   return str.replace(new RegExp(expressionMatch), (a, b) =>
     new Expression('${' + b + '}', compiler).getComputedValue());
+}
+
+function isFunction(functionToCheck) {
+ return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }
