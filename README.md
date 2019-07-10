@@ -1,5 +1,50 @@
 # HTL Compiler
 
+## The Rundown
+
+
+Given an [HTL template](https://docs.adobe.com/content/help/en/experience-manager-htl/using/getting-started/getting-started.html) provided as a string, and data provided as JSON, this compiler will output HTML.
+
+```js
+new Compiler("<div>${message}</div>", { message: "Hello, World!" }).compile();
+```
+
+This will output what you would expect:
+
+```html
+<div>Hello, World!</div>
+```
+
+The following features from the [HTL Spec](https://github.com/adobe/htl-spec) are supported:
+
+1. `data-sly-repeat`
+1. `data-sly-list`
+1. `data-sly-test`
+1. `data-sly-resource`
+1. `data-sly-use`
+1. `data-sly-template`
+1. `data-sly-call`
+1. `data-sly-attribute`
+1. `<sly>`
+
+In order to support the HTL concepts of use models and resources, you can also pass two additional parameters to the compiler:
+
+```js
+new Compiler(
+  "<div>${message}</div>",
+  {
+    message: "Hello, World!"
+    sampleResource: { /* The data that will be available to the sampleResource */ }
+  },
+  {
+    "class.path.of.use.Model": { /* Data you want this use model to provide */ }
+  },
+  {
+    "sampleResource": "The template for the sampleResource"
+  }
+).compile();
+```
+
 ## Usage
 
 Here is a simple hello world example:
