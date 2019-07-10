@@ -1,31 +1,39 @@
 {
-  "name": "htl-compiler",
-  "version": "1.0.0",
-  "description": "A JavaScript compiler for HTL",
-  "main": "index.js",
-  "repository": "https://github.com/megazear7/htl-compiler",
-  "scripts": {
-    "example:browser": "node ./examples/browser/serve.js",
-    "example:cli": "node ./examples/cli/example.js",
-    "test": "nyc mocha",
-    "test:create:it": "node ./create-test-it.js",
-    "test:create:describe": "node ./create-test-describe.js"
-  },
-  "keywords": [
-    "htl",
-    "compiler"
-  ],
-  "author": "Alex Lockhart",
-  "license": "ISC",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "esm": "^3.2.5",
-    "express": "^4.17.1",
-    "fs-extra": "^7.0.1",
-    "mocha": "^6.0.1",
-    "nyc": "^13.3.0"
-  },
-  "dependencies": {
-    "htmlparser2": "^3.10.1"
-  }
+    "name": "htl-compiler",
+    "version": "1.0.0",
+    "description": "A JavaScript compiler for HTL",
+    "main": "dist/compiler.js",
+    "repository": "https://github.com/megazear7/htl-compiler",
+    "scripts": {
+        "preexample:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js",
+        "example:browser": "node ./examples/browser/serve.js",
+        "example:cli": "node ./examples/cli/example.js",
+        "test": "nyc mocha",
+        "test:create:it": "node ./create-test-it.js",
+        "test:create:describe": "node ./create-test-describe.js",
+        "build": "npx webpack --config webpack.config.js",
+        "prepublish": "npm run build"
+    },
+    "keywords": [
+        "htl",
+        "compiler"
+    ],
+    "author": "Alex Lockhart",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/core": "^7.5.4",
+        "@babel/preset-env": "^7.5.4",
+        "babel-loader": "^8.0.6",
+        "chai": "^4.2.0",
+        "esm": "^3.2.5",
+        "express": "^4.17.1",
+        "fs-extra": "^7.0.1",
+        "mocha": "^6.0.1",
+        "nyc": "^13.3.0",
+        "webpack": "^4.35.3",
+        "webpack-cli": "^3.3.5"
+    },
+    "dependencies": {
+        "htmlparser2": "^3.10.1"
+    }
 }
