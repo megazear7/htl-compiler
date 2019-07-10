@@ -1,4 +1,4 @@
-export default class DataSlyList {
+export default class DataSlyRepeat {
   constructor(name, value, compiler) {
     this.name = name;
     this.value = value;
@@ -14,7 +14,7 @@ export default class DataSlyList {
       this.compiler.addUnusedList({
         handle: handle || 'item',
         list: this.value.getComputedValue(),
-        repeatContainer: false
+        repeatContainer: true
       });
     }
 

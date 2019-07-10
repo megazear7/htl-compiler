@@ -41,30 +41,34 @@ export default class Tag {
     let output = '';
     const isRendered = this.isRendered();
 
-    if (isRendered) {
+    const attrResults = Object.keys(this.entry.attribs)
+    .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile());
+
+    const unusedList = this.compiler.unusedList;
+    this.compiler.unusedList = undefined;
+
+    if (isRendered && (! unusedList || ! unusedList.repeatContainer)) {
       output += '<' + this.getElementName();
-    }
-
-    Object.keys(this.entry.attribs).forEach(attr => {
-      const attrResult = new Attr(attr, this.entry.attribs[attr], this.compiler).compile();
-      if (isRendered) {
-        output += attrResult;
-      }
-    });
-
-    if (isRendered) {
+      attrResults.forEach(attrResult => output += attrResult);
       output += '>';
     }
 
-    if (this.compiler.unusedList) {
-      const unusedList = this.compiler.unusedList;
-      this.compiler.unusedList = undefined;
-
+    if (unusedList) {
       unusedList.list.forEach(item => {
         this.compiler.resourceData[unusedList.handle] = item;
         this.entry.children.forEach(child => {
           if (isRendered) {
+            if (unusedList.repeatContainer) {
+              output += '<' + this.getElementName();
+              attrResults.forEach(attrResult => output += attrResult);
+              output += '>';
+            }
+
             output += new Entry(child, this.compiler).compile()
+
+            if (unusedList.repeatContainer) {
+              output += '</' + this.getElementName() + '>';
+            }
           }
         });
       });
@@ -77,7 +81,7 @@ export default class Tag {
         output += new Entry(child, this.compiler).compile());
     }
 
-    if (isRendered) {
+    if (isRendered && (! unusedList || ! unusedList.repeatContainer)) {
       output += '</' + this.getElementName() + '>';
     }
 

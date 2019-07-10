@@ -30,8 +30,8 @@ export default class Compiler {
     return output;
   }
 
-  addUnusedList({ handle, list }) {
-    this.unusedList = { handle, list };
+  addUnusedList({ handle, list, repeatContainer }) {
+    this.unusedList = { handle, list, repeatContainer };
   }
 
   addUnusedText({ value }) {

@@ -1,5 +1,6 @@
 import DataSlyUse from './data-sly-use.js';
 import DataSlyList from './data-sly-list.js';
+import DataSlyRepeat from './data-sly-repeat.js';
 import DataSlyText from './data-sly-text.js';
 import DataSlyAttribute from './data-sly-attribute.js';
 import AttrName from './attr-name.js';
@@ -19,6 +20,8 @@ export default class Attr {
       output += new DataSlyUse(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyList()) {
       output += new DataSlyList(this.name, this.value, this.compiler).compile();
+    } else if (this.name.isSlyRepeat()) {
+      output += new DataSlyRepeat(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyText()) {
       output += new DataSlyText(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyAttribute()) {
