@@ -1,4 +1,4 @@
-import { expressionMatch } from './globals.js';
+import Expression from './expression.js';
 
 export default class Attr {
   constructor(text, compiler) {
@@ -7,16 +7,6 @@ export default class Attr {
   }
 
   compile() {
-    return this.text.replace(new RegExp(expressionMatch), (a, b) => {
-      let value = this.compiler.resourceData;
-      b.split('.').forEach(identifier => {
-        if (typeof value === 'object') {
-          value = value[identifier];
-        } else {
-          value = '';
-        }
-      });
-      return value;
-    });
+    return Expression.calculateEachMatch(this.text, this.compiler);
   }
 }

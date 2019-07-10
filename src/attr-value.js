@@ -1,32 +1,25 @@
-import { expressionMatch } from './globals.js';
+import Expression from './expression.js';
 
 export default class AttrValue {
   constructor(value, compiler) {
     this.value = value;
     this.compiler = compiler;
-    this.matches = new RegExp(expressionMatch).exec(this.value);
+    this.expression = new Expression(this.value, this.compiler);
   }
 
   hasExpression() {
-    return this.matches && this.matches.length >= 2;
+    return this.expression.isValid();
   }
 
   getExpression() {
-    return this.hasExpression() ? this.matches[1] : undefined;
+    return this.expression.getUnwrappedExpression();
   }
 
   getComputedValue() {
     let value = undefined;
 
     if (this.hasExpression()) {
-      value = this.compiler.resourceData;
-      this.getExpression().split('.').forEach(identifier => {
-        if (typeof value === 'object') {
-          value = value[identifier];
-        } else {
-          value = undefined;
-        }
-      });
+      value = this.expression.getComputedValue();
     }
 
     return value;
