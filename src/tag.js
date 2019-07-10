@@ -1,7 +1,7 @@
-import htmlparser from 'htmlparser2';
 import Attr from './attr.js';
 import AttrName from './attr-name.js';
 import Entry from './entry.js';
+import Compiler from './compiler.js';
 
 export default class Tag {
   constructor(entry, compiler) {
@@ -76,6 +76,10 @@ export default class Tag {
       const unusedText = this.compiler.unusedText;
       this.compiler.unusedText = undefined;
       output += unusedText.value;
+    } else if (this.compiler.unusedResource) {
+      const unusedResource = this.compiler.unusedResource;
+      this.compiler.unusedResource = undefined;
+      output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compile();
     } else {
       this.entry.children.forEach(child =>
         output += new Entry(child, this.compiler).compile());

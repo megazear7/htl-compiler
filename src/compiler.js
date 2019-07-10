@@ -37,4 +37,8 @@ export default class Compiler {
   addUnusedText({ value }) {
     this.unusedText = { value };
   }
+
+  setUnusedResource({ type, data }) {
+    this.unusedResource = { type, data };
+  }
 }
