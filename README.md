@@ -14,10 +14,10 @@ npm install htl-compiler
 const Compiler = require('htl-compiler');
 ```
 
-#### UMD Browser Usage
+#### UMD Module Usage
 
 ```html
-<script src="/node_modules/htl-compiler/dist/script.js"></script>
+<script src="/node_modules/htl-compiler/dist/compiler-umd.js"></script>
 ```
 
 ## The Rundown

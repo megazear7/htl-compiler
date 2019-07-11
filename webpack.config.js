@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     entry: "./src/compiler.js",
     output: {
-        filename: "compiler.js",
+        filename: "compiler-umd.js",
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd"
     },
