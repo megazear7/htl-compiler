@@ -14,10 +14,6 @@ npm install htl-compiler
 const compiler = require('htl-compiler')
 ```
 
-#### ES Module Usage
-
-Coming soon...
-
 #### UMD Browser Usage
 
 ```html
