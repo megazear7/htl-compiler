@@ -2,7 +2,7 @@
     "name": "htl-compiler",
     "version": "1.0.0",
     "description": "A JavaScript compiler for HTL",
-    "main": "dist/compiler.js",
+    "main": "/src/compiler.js",
     "repository": "https://github.com/megazear7/htl-compiler",
     "scripts": {
         "example:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js; node ./examples/browser/serve.js",
