@@ -1,4 +1,3 @@
-import htmlparser from 'htmlparser2';
 import Tag from './tag.js';
 import Text from './text.js';
 

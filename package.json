@@ -8,7 +8,7 @@
         "example:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js; node ./examples/browser/serve.js",
         "example:cli": "node ./examples/cli/example.js",
         "test": "nyc mocha",
-        "build": "npx webpack --config webpack.config.js",
+        "build": "npx webpack --config webpack.config.js; npx rollup --config;",
         "prepublish": "npm run build"
     },
     "keywords": [
@@ -31,6 +31,15 @@
         "webpack-cli": "^3.3.5"
     },
     "dependencies": {
-        "htmlparser2": "^3.10.1"
+        "htmlparser2": "^3.10.1",
+        "rollup": "^1.16.7",
+        "rollup-plugin-alias": "^1.5.2",
+        "rollup-plugin-commonjs": "^10.0.1",
+        "rollup-plugin-includepaths": "^0.2.3",
+        "rollup-plugin-json": "^4.0.0",
+        "rollup-plugin-node-builtins": "^2.1.2",
+        "rollup-plugin-node-globals": "^1.4.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-replace": "^2.2.0"
     }
 }
