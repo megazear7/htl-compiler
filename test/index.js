@@ -27,10 +27,11 @@ fs.readdirSync(path.resolve(__dirname, `./tests`)).forEach(describeDir => {
           resourceTypes[key] = fs.readFileSync(path.resolve(__dirname, `./templates/${templateFileName}`), 'utf-8');
         });
 
-        let output = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
+        let outputPromise = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
 
         it(itConfig.it, () => {
-          assert.equal(output.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim(), expected.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim());
+          outputPromise.then(output =>
+            assert.equal(output.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim(), expected.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim()));
         });
       }
     });

@@ -11,6 +11,22 @@ export default class Compiler {
   }
 
   compile() {
+    return Promise.all([
+      Promise.resolve(this.template),
+      Promise.resolve(this.resourceData),
+      Promise.resolve(this.useModels),
+      Promise.resolve(this.resourceTypes)
+    ])
+    .then(values => {
+      this.template = values[0];
+      this.resourceData = values[1];
+      this.useModels = values[2];
+      this.resourceTypes = values[3];
+    })
+    .then(() => this.compileSync());
+  }
+
+  compileSync() {
     let output = '';
 
     var handler = new htmlparser.DomHandler((error, dom) => {

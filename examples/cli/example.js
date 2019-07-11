@@ -34,7 +34,7 @@ async function main() {
   let fooResourceHtml = await fs.readFile(path.resolve(__dirname, './foo-resource.html'), 'utf-8');
   let resourceTypes = { "foo": fooResourceHtml };
 
-  console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compile());
+  console.log((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compileSync());
 }
 
 main();
