@@ -4,6 +4,8 @@ module.exports = {
     entry: "./src/compiler.js",
     output: {
         filename: "compiler-umd.js",
+        library: "Compiler",
+        libraryExport: 'default',
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd"
     },
