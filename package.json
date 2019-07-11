@@ -1,6 +1,6 @@
 {
     "name": "htl-compiler",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "A JavaScript compiler for HTL",
     "main": "dist/compiler.cjs.js",
     "repository": "https://github.com/megazear7/htl-compiler",
@@ -8,7 +8,7 @@
         "example:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js; node ./examples/browser/serve.js",
         "example:cli": "node ./examples/cli/example.js",
         "test": "nyc mocha",
-        "build": "npx webpack --config webpack.config.js",
+        "build": "npx webpack --config webpack.config.js; npx amdtoes6 dist/compiler-amd.js > dist/compiler-esm.js",
         "prepublish": "npm run build"
     },
     "keywords": [
@@ -31,6 +31,7 @@
         "webpack-cli": "^3.3.5"
     },
     "dependencies": {
+        "@buxlabs/amd-to-es6": "^0.13.3",
         "htmlparser2": "^3.10.1"
     }
 }

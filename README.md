@@ -20,6 +20,12 @@ const Compiler = require('htl-compiler');
 <script src="/node_modules/htl-compiler/dist/compiler-umd.js"></script>
 ```
 
+#### AMD Module Usage
+
+A AMD module is also provided at `/dist/compiler.amd.js`.
+
+TODO: Add an example usage of the AMD module.
+
 ## The Rundown
 
 Given an [HTL template](https://docs.adobe.com/content/help/en/experience-manager-htl/using/getting-started/getting-started.html) provided as a string, and data provided as JSON, this compiler will output HTML.

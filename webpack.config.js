@@ -1,6 +1,32 @@
 const path = require("path");
 
-module.exports = {
+module.exports = [
+  {
+    entry: "./src/compiler.js",
+    output: {
+        filename: "compiler-amd.js",
+        library: "Compiler",
+        libraryExport: 'default',
+        path: path.resolve(__dirname, "dist"),
+        libraryTarget: "amd"
+    },
+    mode: "development",
+    module: {
+        rules: [
+            {
+                test: /\.m?js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env"]
+                    }
+                }
+            }
+        ]
+    }
+  },
+  {
     entry: "./src/compiler.js",
     output: {
         filename: "compiler-umd.js",
@@ -24,4 +50,5 @@ module.exports = {
             }
         ]
     }
-};
+  }
+];
