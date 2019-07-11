@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Example of using HTL JS compiler</title>
-    <script type="module">
-      import Compiler from './src/compiler.js';
-      let exampleHtml = '<h1>${test}</h1>';
-      let resourceData = { test: 'Hello, World!' };
-      let useModels = { };
-      let fooResourceHtml = { }
-      let resourceTypes = { };
-
-      document.write((new Compiler(exampleHtml, resourceData, useModels, resourceTypes)).compile());
-    </script>
-  </head>
-  <body>
-    <h1>HTL Compiler Browser Example</h1>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Example of using HTL JS compiler</title>
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <h1>HTL Compiler Browser Example</h1>
+    </body>
 </html>
