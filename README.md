@@ -2,7 +2,6 @@
 
 ## The Rundown
 
-
 Given an [HTL template](https://docs.adobe.com/content/help/en/experience-manager-htl/using/getting-started/getting-started.html) provided as a string, and data provided as JSON, this compiler will output HTML.
 
 ```js
@@ -148,7 +147,11 @@ npm run example:cli
 
 #### Browser Demo
 
-TODO
+To see this in action in the browser run the following command and then open up [localhost:3000](http://localhost:3000).
+
+```bash
+npm run example:cli
+```
 
 ## Test
 
