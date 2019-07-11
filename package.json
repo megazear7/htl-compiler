@@ -5,8 +5,7 @@
     "main": "dist/compiler.js",
     "repository": "https://github.com/megazear7/htl-compiler",
     "scripts": {
-        "preexample:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js",
-        "example:browser": "node ./examples/browser/serve.js",
+        "example:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js; node ./examples/browser/serve.js",
         "example:cli": "node ./examples/cli/example.js",
         "test": "nyc mocha",
         "test:create:it": "node ./create-test-it.js",
