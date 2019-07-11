@@ -21,7 +21,6 @@ export default class DataSlyUse {
 
     if (isClass(this.compiler.useModels[classPath])) {
       this.compiler.resourceData[handle] = new this.compiler.useModels[classPath](this.compiler.resourceData);
-      console.log(this.compiler.resourceData[handle]);
     } else {
       this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
     }
