@@ -1,5 +1,29 @@
 # HTL Compiler
 
+## Usage
+
+#### Installation
+
+```bash
+npm install htl-compiler
+```
+
+#### Node.JS Usage
+
+```js
+const compiler = require('htl-compiler')
+```
+
+#### ES Module Usage
+
+Coming soon...
+
+#### UMD Browser Usage
+
+```html
+<script src="/node_modules/htl-compiler/dist/script.js"></script>
+```
+
 ## The Rundown
 
 Given an [HTL template](https://docs.adobe.com/content/help/en/experience-manager-htl/using/getting-started/getting-started.html) provided as a string, and data provided as JSON, this compiler will output HTML.
@@ -150,10 +174,20 @@ npm run example:cli
 To see this in action in the browser run the following command and then open up [localhost:3000](http://localhost:3000).
 
 ```bash
-npm run example:cli
+npm run example:browser
 ```
 
-## Test
+## Development
+
+#### Build new release
+
+The following command will build a UMD module at /dist/compiler.js
+
+```
+npm build
+```
+
+#### Testing
 
 ```
 npm test
@@ -161,8 +195,3 @@ npm test
 
 27 passing
 0 failing
-
-#### Create new empty test
-
-Copy a folder at `/test/tests/describe-*` to create a new category of tests.
-Copy a folder at `/test/tests/describe-*/it-*` to create a new test within an existing category.
