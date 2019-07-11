@@ -8,8 +8,6 @@
         "example:browser": "npm run build && npx webpack --config ./examples/webpack.config.browser.js; node ./examples/browser/serve.js",
         "example:cli": "node ./examples/cli/example.js",
         "test": "nyc mocha",
-        "test:create:it": "node ./create-test-it.js",
-        "test:create:describe": "node ./create-test-describe.js",
         "build": "npx webpack --config webpack.config.js",
         "prepublish": "npm run build"
     },
