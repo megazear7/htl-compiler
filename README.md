@@ -11,7 +11,7 @@ npm install htl-compiler
 #### Node.JS Usage
 
 ```js
-const compiler = require('htl-compiler')
+const Compiler = require('htl-compiler');
 ```
 
 #### UMD Browser Usage
