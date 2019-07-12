@@ -69,7 +69,7 @@ export default class Tag {
 
     if (unusedList) {
       unusedList.list.forEach(item => {
-        this.compiler.resourceData[unusedList.handle] = item;
+        this.compiler.resourceResolver.setResourceData(unusedList.handle, item);
         this.entry.children.forEach(child => {
           if (isRendered) {
             if (unusedList.repeatContainer) {

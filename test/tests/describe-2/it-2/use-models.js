@@ -1,6 +1,6 @@
 class ExampleModel {
-  constructor(context) {
-    this.name = context.firstName + " " + context.lastName;
+  constructor(resourceResolver) {
+    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
   }
 
   name() {

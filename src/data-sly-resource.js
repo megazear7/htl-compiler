@@ -10,7 +10,7 @@ export default class DataSlyResource {
 
     this.compiler.setUnusedResource({
       type: this.compiler.resourceTypes[this.value.getValue()],
-      data: this.compiler.resourceData[this.value.getValue()]
+      data: this.compiler.resourceResolver.resolve([this.value.getValue()])
     });
 
     return output;

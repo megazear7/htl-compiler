@@ -19,35 +19,11 @@ export default class Expression {
   }
 
   getComputedValue() {
-    let value = this.compiler.resourceData;
-    let valueParent = undefined;
-
-    this.getUnwrappedExpression().split('.').forEach(identifier => {
-      if (typeof value === 'object') {
-        valueParent = value;
-        value = value[identifier];
-      } else {
-        value = undefined;
-      }
-    });
-
-    if (isFunction(value)) {
-      if (valueParent) {
-        value = value.call(valueParent);
-      } else {
-        value = value();
-      }
-    }
-
-    return value;
+    return this.compiler.resourceResolver.resolve(this.getUnwrappedExpression().split('.'));
   }
 }
 
 Expression.calculateEachMatch = function(str, compiler) {
   return str.replace(new RegExp(expressionMatch), (a, b) =>
     new Expression('${' + b + '}', compiler).getComputedValue());
-}
-
-function isFunction(functionToCheck) {
- return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }

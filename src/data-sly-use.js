@@ -20,9 +20,9 @@ export default class DataSlyUse {
     }
 
     if (isClass(this.compiler.useModels[classPath])) {
-      this.compiler.resourceData[handle] = new this.compiler.useModels[classPath](this.compiler.resourceData);
+      this.compiler.resourceResolver.setResourceData(handle, new this.compiler.useModels[classPath](this.compiler.resourceResolver));
     } else {
-      this.compiler.resourceData[handle] = this.compiler.useModels[classPath];
+      this.compiler.resourceResolver.setResourceData(handle, this.compiler.useModels[classPath]);
     }
 
     return output;

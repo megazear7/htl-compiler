@@ -1,8 +1,13 @@
 import htmlparser from 'htmlparser2';
 import Entry from './entry.js';
+import StaticResourceResolver from './static-resource-resolver.js';
 
 export default class Compiler {
-  constructor(template = '', resourceData = { }, useModels = { }, resourceTypes = { }) {
+  constructor(
+      template = '',
+      resourceData = new StaticResourceResolver({ }),
+      useModels = { },
+      resourceTypes = { }) {
     this.template = template;
     this.resourceData = resourceData;
     this.useModels = useModels;
@@ -28,6 +33,8 @@ export default class Compiler {
 
   compileSync() {
     let output = '';
+
+    this.resourceResolver = new StaticResourceResolver(this.resourceData);
 
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
