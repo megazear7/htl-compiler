@@ -7,7 +7,7 @@ export default class DataSlyUse {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     const handle = this.name.getSlyIdentifier();

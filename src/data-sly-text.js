@@ -5,13 +5,13 @@ export default class DataSlyText {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     if (this.value.hasExpression()) {
-      this.compiler.addUnusedText({ value: this.value.getComputedValue() });
+      this.compiler.addUnusedText({ value: await this.value.getComputedValue() });
     } else {
-      this.compiler.addUnusedText({ value: this.value.getValue() });
+      this.compiler.addUnusedText({ value: await this.value.getValue() });
     }
 
     return output;

@@ -12,10 +12,9 @@ export default class Entry {
     let output = '';
 
     if (this.entry.type === 'tag') {
-      var tag = new Tag(this.entry, this.compiler);
-      output += await tag.compile();
+      output += await new Tag(this.entry, this.compiler).compile();
     } else if (this.entry.type === 'text') {
-      output += new Text(this.entry.data, this.compiler).compile();
+      output += await new Text(this.entry.data, this.compiler).compile();
     }
 
     return Promise.resolve(output);

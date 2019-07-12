@@ -5,7 +5,7 @@ export default class DataSlyRepeat {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     const handle = this.name.getSlyIdentifier();
@@ -13,7 +13,7 @@ export default class DataSlyRepeat {
     if (this.value.hasExpression()) {
       this.compiler.addUnusedList({
         handle: handle || 'item',
-        list: this.value.getComputedValue(),
+        list: await this.value.getComputedValue(),
         repeatContainer: true
       });
     }

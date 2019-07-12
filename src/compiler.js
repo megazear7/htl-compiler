@@ -29,37 +29,20 @@ export default class Compiler {
       this.useModels = values[2];
       this.resourceTypes = values[3];
     })
-    .then(() => {
+    .then(async () => {
       let output = '';
 
       if (! isClass(this.resourceResolver)) {
         this.resourceResolver = new StaticResourceResolver(this.resourceResolver);
       }
 
+      let nodes = [ ];
+
       var handler = new htmlparser.DomHandler(async (error, dom) => {
         if (error) {
           console.log(error);
         } else {
-          console.log('X');
-
-          /* ATTENTION! ASYNC RESOURCE RESOLVER
-             THIS SIMPLY WILL NOT WORK.
-             This is inside a callback that is passed to htmlparser2.
-             We cannot use promises here because htmlparser2 is not going to wait
-             for our async promises to complete before returning. This means that
-             the "output" object will not get updated with the result of the
-             entryOutputs, as this code will execute _after_ this the output is
-             returned from the compile method.
-          */
-          let entryOutputs = await Promise.all(
-            dom.map(
-              async entry => await new Entry(entry, this).compile()));
-
-          console.log('1', entryOutputs);
-
-          entryOutputs.forEach(entryOutput => output += entryOutput);
-
-          console.log('2');
+          nodes = dom;
         }
       });
 
@@ -68,7 +51,10 @@ export default class Compiler {
       parser.write(this.template);
       parser.end();
 
-      console.log('COMPILER', output);
+      let entryOutputs = await Promise.all(
+        nodes.map(async entry => await new Entry(entry, this).compile()));
+
+      entryOutputs.forEach(entryOutput => output += entryOutput);
 
       return output;
     });

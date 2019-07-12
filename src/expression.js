@@ -23,7 +23,15 @@ export default class Expression {
   }
 }
 
-Expression.calculateEachMatch = function(str, compiler) {
-  return str.replace(new RegExp(expressionMatch), (a, b) =>
-    new Expression('${' + b + '}', compiler).getComputedValue());
+Expression.calculateEachMatch = async function(str, compiler) {
+  let matches = str.match(new RegExp(expressionMatch));
+
+  if (matches && matches.length > 0) {
+    await Promise.all(matches.map(async match => {
+      let comVal = await new Expression(match, compiler).getComputedValue();
+      str = str.replace(match, comVal);
+    }));
+  }
+
+  return str;
 }

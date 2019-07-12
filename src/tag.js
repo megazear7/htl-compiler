@@ -55,8 +55,8 @@ export default class Tag {
     let output = '';
     const isRendered = await this.isRendered();
 
-    const attrResults = Object.keys(this.entry.attribs)
-    .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile());
+    const attrResults = await Promise.all(Object.keys(this.entry.attribs)
+    .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile()));
 
     const unusedList = this.compiler.unusedList;
     this.compiler.unusedList = undefined;
@@ -74,11 +74,11 @@ export default class Tag {
           if (isRendered) {
             if (unusedList.repeatContainer) {
               output += '<' + this.getElementName();
-              attrResults.forEach(attrResult => output += attrResult);
+              attrResults.map(attrResult => output += attrResult);
               output += '>';
             }
 
-            output += await new Entry(child, this.compiler).compile();
+            output += await new Entry(child, this.compiler).compile()
 
             if (unusedList.repeatContainer) {
               output += '</' + this.getElementName() + '>';
@@ -106,8 +106,12 @@ export default class Tag {
       });
     } else {
       if (await this.isContentRendered()) {
-        this.entry.children.forEach(async child => {
-          output += await new Entry(child, this.compiler).compile();
+        await Promise.all(
+          this.entry.children.map(child => new Entry(child, this.compiler).compile())
+        ).then(outputs => {
+          outputs.forEach(entryOutput => {
+            output += entryOutput;
+          });
         });
       }
     }

@@ -7,7 +7,7 @@ export default class DataSlyCall {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     const template = this.compiler.templates[this.value.expression.getUnwrappedExpression()];

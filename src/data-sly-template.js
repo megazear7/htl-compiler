@@ -5,7 +5,7 @@ export default class DataSlyTemplate {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     this.compiler.addUnusedTemplate({ handler: this.name.getSlyIdentifier() });
