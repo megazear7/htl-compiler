@@ -4,8 +4,8 @@ const esmImport = require('esm')(module);
 const Compiler = esmImport('../../src/compiler.js').default;
 
 class MyClass {
-  constructor(context) {
-    this.name = context.firstName + " " + context.lastName;
+  constructor(resourceResolver) {
+    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
   }
 
   name() {
@@ -14,10 +14,10 @@ class MyClass {
 }
 
 class MovieUseModel {
-  constructor(context) {
-    this.name = context.name;
-    this.releaseDate = context.releaseDate;
-    this._releaseDate = new Date(context.releaseDate);
+  constructor(resourceResolver) {
+    this.name = resourceResolver.resolve('name');
+    this.releaseDate = resourceResolver.resolve('releaseDate');
+    this._releaseDate = new Date(resourceResolver.resolve('releaseDate'));
   }
 
   formattedReleaseDate() {
@@ -38,8 +38,8 @@ class MovieUseModel {
 }
 
 class MoviesUseModel {
-  constructor(context) {
-    this.movies = context.movies.map(movie => {
+  constructor(resourceResolver) {
+    this.movies = resourceResolver.resolve('movies').map(movie => {
       let temp = new MovieUseModel(movie);
       return temp;
     });
@@ -72,7 +72,8 @@ async function main() {
     "simple": "<div>${hello}</div>"
   };
 
-  new Compiler(exampleHtml, resourceData, useModels, resourceTypes).compile().then(result => {
+  new Compiler(exampleHtml, resourceData, useModels, resourceTypes).compile()
+  .then(result => {
     console.log(result);
   });
 }

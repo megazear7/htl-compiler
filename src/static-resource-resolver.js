@@ -29,7 +29,7 @@ export default class StaticResourceResolver {
       }
     }
 
-    return value;
+    return Promise.resolve(value);
   }
 }
 

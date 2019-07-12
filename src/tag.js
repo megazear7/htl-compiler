@@ -9,13 +9,13 @@ export default class Tag {
     this.compiler = compiler;
   }
 
-  isContentRendered() {
+  async isContentRendered() {
     let isContentRendered = true;
 
-    Object.keys(this.entry.attribs).forEach(attrStr => {
+    Object.keys(this.entry.attribs).forEach(async attrStr => {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
+      if ((attrName.isSlyTest() && ! await Promise.resolve(attr.value.getComputedValue())) || attrName.isSlyTemplate()) {
         isContentRendered = false;
       }
     });
@@ -23,13 +23,13 @@ export default class Tag {
     return isContentRendered;
   }
 
-  isRendered() {
+  async isRendered() {
     let isRendered = this.getElementName() != 'sly';
 
-    Object.keys(this.entry.attribs).forEach(attrStr => {
+    Object.keys(this.entry.attribs).forEach(async attrStr => {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
+      if ((attrName.isSlyTest() && ! await Promise.resolve(attr.value.getComputedValue())) || attrName.isSlyTemplate()) {
         isRendered = false;
       }
     });
@@ -51,9 +51,9 @@ export default class Tag {
     return elementName;
   }
 
-  compile() {
+  async compile() {
     let output = '';
-    const isRendered = this.isRendered();
+    const isRendered = await this.isRendered();
 
     const attrResults = Object.keys(this.entry.attribs)
     .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile());
@@ -70,7 +70,7 @@ export default class Tag {
     if (unusedList) {
       unusedList.list.forEach(item => {
         this.compiler.resourceResolver.setResourceData(unusedList.handle, item);
-        this.entry.children.forEach(child => {
+        this.entry.children.forEach(async child => {
           if (isRendered) {
             if (unusedList.repeatContainer) {
               output += '<' + this.getElementName();
@@ -78,7 +78,7 @@ export default class Tag {
               output += '>';
             }
 
-            output += new Entry(child, this.compiler).compile()
+            output += await new Entry(child, this.compiler).compile();
 
             if (unusedList.repeatContainer) {
               output += '</' + this.getElementName() + '>';
@@ -87,25 +87,28 @@ export default class Tag {
         });
       });
     } else if (this.compiler.unusedText) {
-      const unusedText = this.compiler.unusedText;
+      let unusedText = await Promise.resolve(this.compiler.unusedText);
       this.compiler.unusedText = undefined;
       output += unusedText.value;
     } else if (this.compiler.unusedResource) {
-      const unusedResource = this.compiler.unusedResource;
+      let unusedResource = await Promise.resolve(this.compiler.unusedResource);
       this.compiler.unusedResource = undefined;
-      output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compileSync();
+      output += await new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compile();
     } else if (this.compiler.unusedTemplate) {
-      const unusedTemplate = this.compiler.unusedTemplate;
+      let unusedTemplate = await Promise.resolve(this.compiler.unusedTemplate);
       this.compiler.unusedTemplate = undefined;
       this.compiler.templates[unusedTemplate.handler] = { entry: this.entry };
     } else if (this.compiler.uncompiledTemplate) {
-      const uncompiledTemplate = this.compiler.uncompiledTemplate;
+      let uncompiledTemplate = await Promise.resolve(this.compiler.uncompiledTemplate);
       this.compiler.uncompiledTemplate = undefined;
-      uncompiledTemplate.entries.forEach(entry => output += entry.compile());
+      uncompiledTemplate.entries.forEach(async entry => {
+        output += await entry.compile()
+      });
     } else {
-      if (this.isContentRendered()) {
-        this.entry.children.forEach(child =>
-          output += new Entry(child, this.compiler).compile());
+      if (await this.isContentRendered()) {
+        this.entry.children.forEach(async child => {
+          output += await new Entry(child, this.compiler).compile();
+        });
       }
     }
 

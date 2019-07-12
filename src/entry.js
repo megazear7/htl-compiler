@@ -8,15 +8,16 @@ export default class Entry {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     if (this.entry.type === 'tag') {
-      output += new Tag(this.entry, this.compiler).compile();
+      var tag = new Tag(this.entry, this.compiler);
+      output += await tag.compile();
     } else if (this.entry.type === 'text') {
       output += new Text(this.entry.data, this.compiler).compile();
     }
 
-    return output;
+    return Promise.resolve(output);
   }
 }
