@@ -1,15 +1,16 @@
 import htmlparser from 'htmlparser2';
 import Entry from './entry.js';
+import { isClass } from './util.js';
 import StaticResourceResolver from './static-resource-resolver.js';
 
 export default class Compiler {
   constructor(
       template = '',
-      resourceData = new StaticResourceResolver({ }),
+      resourceResolver = new StaticResourceResolver({ }),
       useModels = { },
       resourceTypes = { }) {
     this.template = template;
-    this.resourceData = resourceData;
+    this.resourceResolver = resourceResolver;
     this.useModels = useModels;
     this.resourceTypes = resourceTypes;
     this.templates = [ ];
@@ -18,13 +19,13 @@ export default class Compiler {
   compile() {
     return Promise.all([
       Promise.resolve(this.template),
-      Promise.resolve(this.resourceData),
+      Promise.resolve(this.resourceResolver),
       Promise.resolve(this.useModels),
       Promise.resolve(this.resourceTypes)
     ])
     .then(values => {
       this.template = values[0];
-      this.resourceData = values[1];
+      this.resourceResolver = values[1];
       this.useModels = values[2];
       this.resourceTypes = values[3];
     })
@@ -34,7 +35,9 @@ export default class Compiler {
   compileSync() {
     let output = '';
 
-    this.resourceResolver = new StaticResourceResolver(this.resourceData);
+    if (! isClass(this.resourceResolver)) {
+      this.resourceResolver = new StaticResourceResolver(this.resourceResolver);
+    }
 
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
