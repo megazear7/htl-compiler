@@ -189,7 +189,7 @@ export default class StaticResourceResolver {
 
 The `setResourceData` is used at various times during script execution and provides your resource resolver with additional data that it needs to be capable of resolving. If this method is not properly implemented then features such as data-sly-use and data-sly-list will not work because the context data for those features will not be available from your resource resolver. This likely means that you need to set this jsonData to some internal state and check for it's existence in the resolve method before performing custom resource resolution logic.
 
-The `resolve` method takes a path variable which can either be a string of the form `some.path.separated.by.periods` or an array of the form `['some', 'path', 'as', 'an', 'array']`. Your resource resolver should contain some logic for retrieving the value of the indicated resource and should be capable of handling both paths and strings, most likely by checking `typeof path === 'string'` and if so then doing `path = path.split('.')`.
+The `resolve` method takes a path variable which can either be a string of the form `some.path.separated.by.periods`. Your resource resolver should contain some logic for retrieving the value of the indicated resource.
 
 An example use case for this is to provide a resource resolver that resolves resource paths to urls for integration with a custom API.
 

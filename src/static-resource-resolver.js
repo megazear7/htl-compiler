@@ -8,11 +8,11 @@ export default class StaticResourceResolver {
   }
 
   resolve(path) {
-    if (typeof path === 'string') path = path.split('.');
+    let pathSegments = path.split('.');
     let value = this.staticJsonData;
     let valueParent = undefined;
 
-    path.forEach(segment => {
+    pathSegments.forEach(segment => {
       if (typeof value === 'object') {
         valueParent = value;
         value = value[segment];

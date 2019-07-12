@@ -19,7 +19,7 @@ export default class Expression {
   }
 
   getComputedValue() {
-    return this.compiler.resourceResolver.resolve(this.getUnwrappedExpression().split('.'));
+    return this.compiler.resourceResolver.resolve(this.getUnwrappedExpression());
   }
 }
 
