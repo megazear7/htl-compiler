@@ -119,8 +119,8 @@ const compiledHtml = new Compiler(exampleHtml, resourceData, useModels).compile(
 
 ```js
 class MyClass {
-  constructor(context) {
-    this.name = context.firstName + " " + context.lastName;
+  constructor(resourceResolver) {
+    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
   }
 
   name() {
