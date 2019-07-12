@@ -163,9 +163,7 @@ const compiledHtml = new Compiler(exampleHtml, resourceData, { }, resourceTypes)
 
 #### Custom Resource Resolvers
 
-The second parameter is the resource resolver. If you provide a JSON object (with no constructor)
-a static resource resolver will be used. That is resource paths will simply resole to the data
-at the specified location in the provided json structure. For example if you provide the below json as the second parameter:
+The second parameter to the compiler is the resource resolver. If you provide a JSON object (with no constructor) a static resource resolver will be used. That means that resource paths will simply resolve to the data at the specified location in the provided json structure. For example if you provide the below json as the second parameter:
 
 ```json
 {
@@ -177,22 +175,23 @@ at the specified location in the provided json structure. For example if you pro
 
 Then the resource at the `example.path` will evaluate to the string `"hello"`.
 
-However you can provide your own resource resolver that resolves paths differently. In order to do this you must provide a class as the second parameter to the compiler that fullfills the following API:
+However you can provide your own resource resolver that resolves paths differently. In order to do this you must provide a class as the second parameter to the compiler that implements the following API:
 
-```
+```js
 export default class StaticResourceResolver {
   setResourceData(identifier, jsonData) {
   }
 
   resolve(path) {
+  }
 }
 ```
 
-The `setResourceData` is used at various times during script execution and provides your resource resolver with additional data that it needs to be capable of resolving. If this method is not properly implemented then features such as data-sly-use and data-sly-list will not work because the context data for those features will not be available from your resource resolver.
+The `setResourceData` is used at various times during script execution and provides your resource resolver with additional data that it needs to be capable of resolving. If this method is not properly implemented then features such as data-sly-use and data-sly-list will not work because the context data for those features will not be available from your resource resolver. This likely means that you need to set this jsonData to some internal state and check for it's existence in the resolve method before performing custom resource resolution logic.
 
 The `resolve` method takes a path variable which can either be a string of the form `some.path.separated.by.periods` or an array of the form `['some', 'path', 'as', 'an', 'array']`. Your resource resolver should contain some logic for retrieving the value of the indicated resource and should be capable of handling both paths and strings, most likely by checking `typeof path === 'string'` and if so then doing `path = path.split('.')`.
 
-An example use case for this is to provide a resource resolver that resolves resource paths to urls.
+An example use case for this is to provide a resource resolver that resolves resource paths to urls for integration with a custom API.
 
 ## Demos
 
