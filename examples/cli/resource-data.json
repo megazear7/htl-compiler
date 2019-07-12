@@ -16,5 +16,23 @@
     "BBB",
     "CCC"
   ],
-  "anotherValue": "some other value"
+  "anotherValue": "some other value",
+  "simple": {
+    "hello": "world!"
+  },
+  "message": "Best Movies",
+  "movies": [
+    {
+      "name": "Lord of the Rings",
+      "releaseDate": 1009083600000
+    },
+    {
+      "name": "Interstellar",
+      "releaseDate": 1411444800000
+    },
+    {
+      "name": "Band of Brothers",
+      "releaseDate": 1111554000000
+    }
+  ]
 }

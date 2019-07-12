@@ -1,3 +1,5 @@
 {
-  "exampleGlobalValue": "Example global value"
+  "simple": {
+    "hello": "world!"
+  }
 }

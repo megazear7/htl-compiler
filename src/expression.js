@@ -20,9 +20,11 @@ export default class Expression {
 
   getComputedValue() {
     let value = this.compiler.resourceData;
+    let valueParent = undefined;
 
     this.getUnwrappedExpression().split('.').forEach(identifier => {
       if (typeof value === 'object') {
+        valueParent = value;
         value = value[identifier];
       } else {
         value = undefined;
@@ -30,7 +32,11 @@ export default class Expression {
     });
 
     if (isFunction(value)) {
-      value = value();
+      if (valueParent) {
+        value = value.call(valueParent);
+      } else {
+        value = value();
+      }
     }
 
     return value;

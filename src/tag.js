@@ -93,7 +93,7 @@ export default class Tag {
     } else if (this.compiler.unusedResource) {
       const unusedResource = this.compiler.unusedResource;
       this.compiler.unusedResource = undefined;
-      output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compile();
+      output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compileSync();
     } else if (this.compiler.unusedTemplate) {
       const unusedTemplate = this.compiler.unusedTemplate;
       this.compiler.unusedTemplate = undefined;

@@ -1,3 +1,3 @@
 {
-  "simple": "simple.html"
+  "simple": "<div>${hello}</div>"
 }

@@ -22,16 +22,9 @@ fs.readdirSync(path.resolve(__dirname, `./tests`)).forEach(describeDir => {
         }
         let resourceTypes = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'tests', describeDir, itDir, `resources.json`), 'utf-8'));
 
-        Object.keys(resourceTypes).forEach(key => {
-          let templateFileName = resourceTypes[key];
-          resourceTypes[key] = fs.readFileSync(path.resolve(__dirname, `./templates/${templateFileName}`), 'utf-8');
-        });
-
-        let outputPromise = (new Compiler(template, resourceData, useModels, resourceTypes)).compile();
-
-        it(itConfig.it, () => {
-          outputPromise.then(output =>
-            assert.equal(output.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim(), expected.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim()));
+        it(itConfig.it, async () => {
+          let result = await new Compiler(template, resourceData, useModels, resourceTypes).compile();
+          assert.equal(result.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim(), expected.replace(/\s{2,}/g,' ').replace(/\n/g,' ').trim())
         });
       }
     });
