@@ -12,7 +12,6 @@ class MovieUseModel {
   }
 
   formattedReleaseDate() {
-    // TODO NOT WORKING
     var monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",

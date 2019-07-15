@@ -51,10 +51,9 @@ export default class Compiler {
       parser.write(this.template);
       parser.end();
 
-      let entryOutputs = await Promise.all(
-        nodes.map(async entry => await new Entry(entry, this).compile()));
-
-      entryOutputs.forEach(entryOutput => output += entryOutput);
+      for (let node of nodes) {
+        output += await new Entry(node, this).compile();
+      }
 
       return output;
     });

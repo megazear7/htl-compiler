@@ -106,9 +106,9 @@ export default class Tag {
     } else if (this.compiler.uncompiledTemplate) {
       let uncompiledTemplate = await Promise.resolve(this.compiler.uncompiledTemplate);
       this.compiler.uncompiledTemplate = undefined;
-      uncompiledTemplate.entries.forEach(async entry => {
+      for (let entry of uncompiledTemplate.entries) {
         output += await entry.compile()
-      });
+      }
     } else {
       if (await this.isContentRendered()) {
         await Promise.all(
