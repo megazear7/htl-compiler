@@ -1,0 +1,5 @@
+{
+  "outer": "<div data-sly-resource=\"nested\"></div>",
+  "nested": "<span data-sly-resource=\"deeplyNested\"></span>",
+  "deeplyNested": "<button>${hello}</button>"
+}

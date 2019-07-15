@@ -1,0 +1,9 @@
+{
+  "outer": {
+    "nested": {
+      "deeplyNested": {
+        "hello": "world!"
+      }
+    }
+  }
+}

@@ -245,5 +245,5 @@ npm test
 ```
 
 97% test coverage
-29 passing
+30 passing
 0 failing
