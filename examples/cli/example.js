@@ -16,15 +16,20 @@ class MyClass {
   }
 }
 
-class MovieUseModel {
+class MoviesUseModel {
   constructor(resourceResolver) {
-    this.name = resourceResolver.resolve('name');
-    this.releaseDate = resourceResolver.resolve('releaseDate');
-    this._releaseDate = new Date(resourceResolver.resolve('releaseDate'));
+    this.movies = resourceResolver.resolve('movies').then(movies => movies.map(movie => new MovieUseModel(movie)));
+  }
+}
+
+class MovieUseModel {
+  constructor(context) {
+    this.name = context.name;
+    this.releaseDate = context.releaseDate;
+    this._releaseDate = new Date(context.releaseDate);
   }
 
   formattedReleaseDate() {
-    // TODO NOT WORKING
     var monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",
@@ -37,15 +42,6 @@ class MovieUseModel {
     var year = this._releaseDate.getFullYear();
 
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
-  }
-}
-
-class MoviesUseModel {
-  constructor(resourceResolver) {
-    this.movies = resourceResolver.resolve('movies').map(movie => {
-      let temp = new MovieUseModel(movie);
-      return temp;
-    });
   }
 }
 
