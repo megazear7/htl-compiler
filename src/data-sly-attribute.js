@@ -5,11 +5,11 @@ export default class DataSlyAttribute {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     if (this.name.hasSlyIdentifier()) {
-      output += ' ' + this.name.getSlyIdentifier() + '=' + '"' + this.value.getValue() + '"';
+      output += ' ' + this.name.getSlyIdentifier() + '=' + '"' + await this.value.getValue() + '"';
     } else {
       throw "data-sly-attribute requires an identifier";
     }

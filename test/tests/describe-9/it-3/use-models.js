@@ -1,10 +1,10 @@
-class MoviesUseModel {
+export class MoviesUseModel {
   constructor(resourceResolver) {
     this.movies = resourceResolver.resolve('movies').then(movies => movies.map(movie => new MovieUseModel(movie)));
   }
 }
 
-class MovieUseModel {
+export class MovieUseModel {
   constructor(context) {
     this.name = context.name;
     this.releaseDate = context.releaseDate;

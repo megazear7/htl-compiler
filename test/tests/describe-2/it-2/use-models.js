@@ -1,10 +1,13 @@
 class ExampleModel {
   constructor(resourceResolver) {
-    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
+    this._namePromise = Promise.all([
+      resourceResolver.resolve('firstName'),
+      resourceResolver.resolve('lastName')
+    ]).then(name => name[0] + ' ' + name[1]);
   }
 
   name() {
-    return name;
+    return this._namePromise;
   }
 }
 

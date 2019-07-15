@@ -4,12 +4,21 @@ const esmImport = require('esm')(module);
 const Compiler = esmImport('../../src/compiler.js').default;
 
 class MyClass {
-  constructor(context) {
-    this.name = context.firstName + " " + context.lastName;
+  constructor(resourceResolver) {
+    this._namePromise = Promise.all([
+      resourceResolver.resolve('firstName'),
+      resourceResolver.resolve('lastName')
+    ]).then(name => name[0] + ' ' + name[1]);
   }
 
   name() {
-    return this.name;
+    return this._namePromise;
+  }
+}
+
+class MoviesUseModel {
+  constructor(resourceResolver) {
+    this.movies = resourceResolver.resolve('movies').then(movies => movies.map(movie => new MovieUseModel(movie)));
   }
 }
 
@@ -21,7 +30,6 @@ class MovieUseModel {
   }
 
   formattedReleaseDate() {
-    // TODO NOT WORKING
     var monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",
@@ -34,15 +42,6 @@ class MovieUseModel {
     var year = this._releaseDate.getFullYear();
 
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
-  }
-}
-
-class MoviesUseModel {
-  constructor(context) {
-    this.movies = context.movies.map(movie => {
-      let temp = new MovieUseModel(movie);
-      return temp;
-    });
   }
 }
 
@@ -72,7 +71,8 @@ async function main() {
     "simple": "<div>${hello}</div>"
   };
 
-  new Compiler(exampleHtml, resourceData, useModels, resourceTypes).compile().then(result => {
+  new Compiler(exampleHtml, resourceData, useModels, resourceTypes).compile()
+  .then(result => {
     console.log(result);
   });
 }

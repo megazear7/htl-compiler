@@ -10,7 +10,7 @@ module.exports = [
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "amd"
     },
-    mode: "development",
+    mode: "production",
     module: {
         rules: [
             {
@@ -19,7 +19,14 @@ module.exports = [
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env"]
+                        presets: [
+                            ["@babel/preset-env", {
+                                "useBuiltIns": false,
+                            }]
+                        ],
+                        plugins: [
+                          "@babel/plugin-transform-runtime"
+                        ]
                     }
                 }
             }
@@ -35,7 +42,7 @@ module.exports = [
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd"
     },
-    mode: "development",
+    mode: "production",
     module: {
         rules: [
             {
@@ -44,7 +51,14 @@ module.exports = [
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env"]
+                        presets: [
+                            ["@babel/preset-env", {
+                                "useBuiltIns": false,
+                            }]
+                        ],
+                        plugins: [
+                          "@babel/plugin-transform-runtime"
+                        ]
                     }
                 }
             }

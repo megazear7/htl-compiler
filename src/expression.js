@@ -23,7 +23,18 @@ export default class Expression {
   }
 }
 
-Expression.calculateEachMatch = function(str, compiler) {
-  return str.replace(new RegExp(expressionMatch), (a, b) =>
-    new Expression('${' + b + '}', compiler).getComputedValue());
+Expression.calculateEachMatch = async function(str, compiler) {
+  let matches = str.match(new RegExp(expressionMatch));
+
+  if (matches && matches.length > 0) {
+    const expressions = matches.map(match => new Expression(match, compiler));
+    const promises = expressions.map(expression => expression.getComputedValue());
+    var values = await Promise.all(promises);
+
+    values.forEach((value, index) => {
+      str = str.replace(matches[index], value);
+    });
+  }
+
+  return str;
 }

@@ -1,12 +1,12 @@
 import Expression from './expression.js';
 
-export default class Attr {
+export default class Text {
   constructor(text, compiler) {
     this.text = text;
     this.compiler = compiler;
   }
 
-  compile() {
-    return Expression.calculateEachMatch(this.text, this.compiler);
+  async compile() {
+    return await Expression.calculateEachMatch(this.text, this.compiler);
   }
 }

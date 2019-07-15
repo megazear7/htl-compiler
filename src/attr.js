@@ -16,29 +16,29 @@ export default class Attr {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     if (this.name.isSlyUse()) {
-      output += new DataSlyUse(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyUse(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyList()) {
-      output += new DataSlyList(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyList(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyRepeat()) {
-      output += new DataSlyRepeat(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyRepeat(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyText()) {
-      output += new DataSlyText(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyText(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyAttribute()) {
-      output += new DataSlyAttribute(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyAttribute(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyResource()) {
-      output += new DataSlyResource(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyResource(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyTemplate()) {
-      output += new DataSlyTemplate(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyTemplate(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyCall()) {
-      output += new DataSlyCall(this.name, this.value, this.compiler).compile();
+      output += await new DataSlyCall(this.name, this.value, this.compiler).compile();
     } else if (this.name.isSlyElement()) {
       // Don't output anything
     } else {
-      output += ' ' + this.name.getStandardName() + '="' + this.value.getValue() + '"';
+      output += ' ' + this.name.getStandardName() + '="' + await this.value.getValue() + '"';
     }
 
     return output;

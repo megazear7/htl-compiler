@@ -29,32 +29,34 @@ export default class Compiler {
       this.useModels = values[2];
       this.resourceTypes = values[3];
     })
-    .then(() => this.compileSync());
-  }
+    .then(async () => {
+      let output = '';
 
-  compileSync() {
-    let output = '';
-
-    if (! isClass(this.resourceResolver)) {
-      this.resourceResolver = new StaticResourceResolver(this.resourceResolver);
-    }
-
-    var handler = new htmlparser.DomHandler((error, dom) => {
-      if (error) {
-        console.log(error);
-      } else {
-        dom.forEach(entry => {
-          output += new Entry(entry, this).compile();
-        });
+      if (! isClass(this.resourceResolver)) {
+        this.resourceResolver = new StaticResourceResolver(this.resourceResolver);
       }
+
+      let nodes = [ ];
+
+      var handler = new htmlparser.DomHandler(async (error, dom) => {
+        if (error) {
+          console.log(error);
+        } else {
+          nodes = dom;
+        }
+      });
+
+      const parser = new htmlparser.Parser(handler, { lowerCaseAttributeNames: false });
+
+      parser.write(this.template);
+      parser.end();
+
+      for (let node of nodes) {
+        output += await new Entry(node, this).compile();
+      }
+
+      return output;
     });
-
-    const parser = new htmlparser.Parser(handler, { lowerCaseAttributeNames: false });
-
-    parser.write(this.template);
-    parser.end();
-
-    return output;
   }
 
   addUnusedList({ handle, list, repeatContainer }) {

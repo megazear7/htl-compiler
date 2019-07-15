@@ -1,6 +1,6 @@
 {
     "name": "htl-compiler",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "A JavaScript compiler for HTL",
     "main": "dist/compiler-cjs.js",
     "repository": "https://github.com/megazear7/htl-compiler",
@@ -19,8 +19,11 @@
     "license": "ISC",
     "devDependencies": {
         "@babel/core": "^7.5.4",
+        "@babel/plugin-transform-async-to-generator": "^7.5.0",
+        "@babel/plugin-transform-runtime": "^7.5.0",
         "@babel/preset-env": "^7.5.4",
         "babel-loader": "^8.0.6",
+        "babel-plugin-transform-runtime": "^6.23.0",
         "chai": "^4.2.0",
         "esm": "^3.2.5",
         "express": "^4.17.1",
@@ -31,6 +34,7 @@
         "webpack-cli": "^3.3.5"
     },
     "dependencies": {
+        "@babel/runtime": "^7.5.4",
         "@buxlabs/amd-to-es6": "^0.13.3",
         "htmlparser2": "^3.10.1"
     }

@@ -9,30 +9,30 @@ export default class Tag {
     this.compiler = compiler;
   }
 
-  isContentRendered() {
+  async isContentRendered() {
     let isContentRendered = true;
 
-    Object.keys(this.entry.attribs).forEach(attrStr => {
+    for (let attrStr of Object.keys(this.entry.attribs)) {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
+      if ((attrName.isSlyTest() && ! await Promise.resolve(attr.value.getComputedValue())) || attrName.isSlyTemplate()) {
         isContentRendered = false;
       }
-    });
+    }
 
     return isContentRendered;
   }
 
-  isRendered() {
+  async isRendered() {
     let isRendered = this.getElementName() != 'sly';
 
-    Object.keys(this.entry.attribs).forEach(attrStr => {
+    for (let attrStr of Object.keys(this.entry.attribs)) {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if ((attrName.isSlyTest() && ! attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
+      if ((attrName.isSlyTest() && ! await attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
         isRendered = false;
       }
-    });
+    }
 
     return isRendered;
   }
@@ -51,12 +51,12 @@ export default class Tag {
     return elementName;
   }
 
-  compile() {
+  async compile() {
     let output = '';
-    const isRendered = this.isRendered();
+    const isRendered = await this.isRendered();
 
-    const attrResults = Object.keys(this.entry.attribs)
-    .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile());
+    const attrResults = await Promise.all(Object.keys(this.entry.attribs)
+    .map(attr => new Attr(attr, this.entry.attribs[attr], this.compiler).compile()));
 
     const unusedList = this.compiler.unusedList;
     this.compiler.unusedList = undefined;
@@ -68,44 +68,56 @@ export default class Tag {
     }
 
     if (unusedList) {
-      unusedList.list.forEach(item => {
-        this.compiler.resourceResolver.setResourceData(unusedList.handle, item);
-        this.entry.children.forEach(child => {
+      let listIndex = 0;
+      for (let listItem of unusedList.list) {
+        this.compiler.resourceResolver.setResourceData(unusedList.handle, listItem);
+        this.compiler.resourceResolver.setResourceData(unusedList.handle + 'Index', listIndex);
+
+        let entryOutputs = await Promise.all(this.entry.children.map(child => new Entry(child, this.compiler).compile()))
+        entryOutputs.forEach(entryOutput => {
           if (isRendered) {
             if (unusedList.repeatContainer) {
               output += '<' + this.getElementName();
-              attrResults.forEach(attrResult => output += attrResult);
+              attrResults.map(attrResult => output += attrResult);
               output += '>';
             }
 
-            output += new Entry(child, this.compiler).compile()
+            output += entryOutput;
 
             if (unusedList.repeatContainer) {
               output += '</' + this.getElementName() + '>';
             }
           }
         });
-      });
+        listIndex++;
+      }
     } else if (this.compiler.unusedText) {
-      const unusedText = this.compiler.unusedText;
+      let unusedText = await Promise.resolve(this.compiler.unusedText);
       this.compiler.unusedText = undefined;
       output += unusedText.value;
     } else if (this.compiler.unusedResource) {
-      const unusedResource = this.compiler.unusedResource;
+      let unusedResource = await Promise.resolve(this.compiler.unusedResource);
       this.compiler.unusedResource = undefined;
-      output += new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compileSync();
+      output += await new Compiler(unusedResource.type, unusedResource.data, this.compiler.useModels, this.compiler.resourceTypes).compile();
     } else if (this.compiler.unusedTemplate) {
-      const unusedTemplate = this.compiler.unusedTemplate;
+      let unusedTemplate = await Promise.resolve(this.compiler.unusedTemplate);
       this.compiler.unusedTemplate = undefined;
       this.compiler.templates[unusedTemplate.handler] = { entry: this.entry };
     } else if (this.compiler.uncompiledTemplate) {
-      const uncompiledTemplate = this.compiler.uncompiledTemplate;
+      let uncompiledTemplate = await Promise.resolve(this.compiler.uncompiledTemplate);
       this.compiler.uncompiledTemplate = undefined;
-      uncompiledTemplate.entries.forEach(entry => output += entry.compile());
+      for (let entry of uncompiledTemplate.entries) {
+        output += await entry.compile()
+      }
     } else {
-      if (this.isContentRendered()) {
-        this.entry.children.forEach(child =>
-          output += new Entry(child, this.compiler).compile());
+      if (await this.isContentRendered()) {
+        await Promise.all(
+          this.entry.children.map(child => new Entry(child, this.compiler).compile())
+        ).then(outputs => {
+          outputs.forEach(entryOutput => {
+            output += entryOutput;
+          });
+        });
       }
     }
 

@@ -1,11 +1,13 @@
 # HTL Compiler
 
+> Compile HTL templates in the browser or in Node.JS. HTL is a HTML templating language originally created by Adobe and is now apart of the Apache Software Foundation.
+
 ## Usage
 
 #### Installation
 
 ```bash
-npm install htl-compiler
+npm install htl-compiler --save
 ```
 
 #### Node.JS Usage
@@ -83,11 +85,11 @@ const exampleHtml = `
   <div>\${myMessage}</div>
 `;
 
-const resourceData = {
+const resourceResolver = {
   myMessage: "Hello, World!"
 }
 
-const compiledHtml = new Compiler(exampleHtml, resourceData).compile();
+const compiledHtml = new Compiler(exampleHtml, resourceResolver).compile();
 // This will produce <div>Hello, World!</div>
 ```
 
@@ -103,7 +105,7 @@ const exampleHtml = `
   <div>\${test.messageFromTestModel}</div>
 `;
 
-const resourceData = {
+const resourceResolver = {
   myMessage: "Hello, World!"
 }
 
@@ -113,18 +115,27 @@ const useModels = {
   }
 }
 
-const compiledHtml = new Compiler(exampleHtml, resourceData, useModels).compile();
+const compiledHtml = new Compiler(exampleHtml, resourceResolver, useModels).compile();
 // This will produce <div>Hello from TestModel</div>
 ```
+
+##### Class Based Use Models
+
+You can also provide a class as a use model. It's constructor will receive a resource resolver.
+The resource resolvers resolve method will give you access to the resource data, however this comes in the form of a promise.
+For this reason you should resolve all of the data you need, perform your business logic, and then return a promise of the result in the methods that you expost to the template.
 
 ```js
 class MyClass {
   constructor(resourceResolver) {
-    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
+    this.namePromise = Promise.all(
+      resourceResolver.resolve('firstName'),
+      resourceResolver.resolve('lastName')
+    ).then(name => name[0] + ' ' + name[1]);
   }
 
   name() {
-    return this.name;
+    return this.namePromise;
   }
 }
 
@@ -147,7 +158,7 @@ const exampleHtml = `
   <div data-sly-resource="simple"></div>
 `;
 
-const resourceData = {
+const resourceResolver = {
   simple: {
     nestedResourceData: "Hello from the simple resource"
   }
@@ -157,7 +168,7 @@ const resourceTypes = {
   "simple": "<div>\${nestedResourceData}</div>"
 }
 
-const compiledHtml = new Compiler(exampleHtml, resourceData, { }, resourceTypes).compile();
+const compiledHtml = new Compiler(exampleHtml, resourceResolver, { }, resourceTypes).compile();
 // This will produce <div><div>Hello from the simple resource</div></div>
 ```
 
@@ -189,9 +200,15 @@ export default class StaticResourceResolver {
 
 The `setResourceData` is used at various times during script execution and provides your resource resolver with additional data that it needs to be capable of resolving. If this method is not properly implemented then features such as data-sly-use and data-sly-list will not work because the context data for those features will not be available from your resource resolver. This likely means that you need to set this jsonData to some internal state and check for it's existence in the resolve method before performing custom resource resolution logic.
 
-The `resolve` method takes a path variable which can either be a string of the form `some.path.separated.by.periods`. Your resource resolver should contain some logic for retrieving the value of the indicated resource.
+The `resolve` method takes a path variable which can either be a string of the form `some.path.separated.by.periods`. Your resource resolver should contain some logic for retrieving the value of the indicated resource. This method can either return a promise or the actual value.
 
 An example use case for this is to provide a resource resolver that resolves resource paths to urls for integration with a custom API.
+
+To use your resource resolver you will pass it as the second parameter, constructing an instance of your resource resolver.
+
+```js
+const compiledHtml = new Compiler(exampleHtml, new MyCustomResourceResolver()).compile();
+```
 
 ## Demos
 
@@ -227,5 +244,6 @@ npm build
 npm test
 ```
 
-27 passing
+97% test coverage
+29 passing
 0 failing

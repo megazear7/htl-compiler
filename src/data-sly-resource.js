@@ -5,12 +5,12 @@ export default class DataSlyResource {
     this.compiler = compiler;
   }
 
-  compile() {
+  async compile() {
     let output = '';
 
     this.compiler.setUnusedResource({
-      type: this.compiler.resourceTypes[this.value.getValue()],
-      data: this.compiler.resourceResolver.resolve(this.value.getValue())
+      type: this.compiler.resourceTypes[await this.value.getValue()],
+      data: await this.compiler.resourceResolver.resolve(await this.value.getValue())
     });
 
     return output;
