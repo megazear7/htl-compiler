@@ -10,7 +10,7 @@ module.exports = [
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "amd"
     },
-    mode: "development",
+    mode: "production",
     module: {
         rules: [
             {
@@ -35,7 +35,7 @@ module.exports = [
         path: path.resolve(__dirname, "dist"),
         libraryTarget: "umd"
     },
-    mode: "development",
+    mode: "production",
     module: {
         rules: [
             {
