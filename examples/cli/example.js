@@ -5,11 +5,14 @@ const Compiler = esmImport('../../src/compiler.js').default;
 
 class MyClass {
   constructor(resourceResolver) {
-    this.name = resourceResolver.resolve('firstName') + " " + resourceResolver.resolve('lastName');
+    this._namePromise = Promise.all([
+      resourceResolver.resolve('firstName'),
+      resourceResolver.resolve('lastName')
+    ]).then(name => name[0] + ' ' + name[1]);
   }
 
   name() {
-    return this.name;
+    return this._namePromise;
   }
 }
 

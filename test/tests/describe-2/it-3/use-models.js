@@ -1,6 +1,6 @@
 class MoviesUseModel {
   constructor(resourceResolver) {
-    this.movies = resourceResolver.resolve('movies').map(movie => new MovieUseModel(movie));
+    this.movies = resourceResolver.resolve('movies').then(movies => movies.map(movie => new MovieUseModel(movie)));
   }
 }
 
