@@ -68,31 +68,29 @@ export default class Tag {
     }
 
     if (unusedList) {
-
-      const multiDimensionalArray = unusedList.list.map((item, listIndex) => {
-        this.compiler.resourceResolver.setResourceData(unusedList.handle, item);
+      let listIndex = 0;
+      for (let listItem of unusedList.list) {
+        this.compiler.resourceResolver.setResourceData(unusedList.handle, listItem);
         this.compiler.resourceResolver.setResourceData(unusedList.handle + 'Index', listIndex);
 
-        return this.entry.children.map(child => new Entry(child, this.compiler).compile())
-      });
+        let entryOutputs = await Promise.all(this.entry.children.map(child => new Entry(child, this.compiler).compile()))
+        entryOutputs.forEach(entryOutput => {
+          if (isRendered) {
+            if (unusedList.repeatContainer) {
+              output += '<' + this.getElementName();
+              attrResults.map(attrResult => output += attrResult);
+              output += '>';
+            }
 
-      const promiseArray = [].concat.apply([], multiDimensionalArray);
+            output += entryOutput;
 
-      (await Promise.all(promiseArray)).forEach(entryOutput => {
-        if (isRendered) {
-          if (unusedList.repeatContainer) {
-            output += '<' + this.getElementName();
-            attrResults.map(attrResult => output += attrResult);
-            output += '>';
+            if (unusedList.repeatContainer) {
+              output += '</' + this.getElementName() + '>';
+            }
           }
-
-          output += entryOutput;
-
-          if (unusedList.repeatContainer) {
-            output += '</' + this.getElementName() + '>';
-          }
-        }
-      });
+        });
+        listIndex++;
+      }
     } else if (this.compiler.unusedText) {
       let unusedText = await Promise.resolve(this.compiler.unusedText);
       this.compiler.unusedText = undefined;
