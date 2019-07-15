@@ -1,5 +1,7 @@
 # HTL Compiler
 
+> Compile HTL templates in the browser or in Node.JS. HTL is a HTML templating language originally created by Adobe and is now apart of the Apache Software Foundation.
+
 ## Usage
 
 #### Installation
