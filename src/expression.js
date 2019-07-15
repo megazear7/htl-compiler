@@ -27,10 +27,13 @@ Expression.calculateEachMatch = async function(str, compiler) {
   let matches = str.match(new RegExp(expressionMatch));
 
   if (matches && matches.length > 0) {
-    await Promise.all(matches.map(async match => {
-      let comVal = await new Expression(match, compiler).getComputedValue();
-      str = str.replace(match, comVal);
-    }));
+    const expressions = matches.map(match => new Expression(match, compiler));
+    const promises = expressions.map(expression => expression.getComputedValue());
+    var values = await Promise.all(promises);
+
+    values.forEach((value, index) => {
+      str = str.replace(matches[index], value);
+    });
   }
 
   return str;

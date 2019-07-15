@@ -68,23 +68,30 @@ export default class Tag {
     }
 
     if (unusedList) {
-      unusedList.list.forEach(item => {
+
+      const multiDimensionalArray = unusedList.list.map((item, listIndex) => {
         this.compiler.resourceResolver.setResourceData(unusedList.handle, item);
-        this.entry.children.forEach(async child => {
-          if (isRendered) {
-            if (unusedList.repeatContainer) {
-              output += '<' + this.getElementName();
-              attrResults.map(attrResult => output += attrResult);
-              output += '>';
-            }
+        this.compiler.resourceResolver.setResourceData(unusedList.handle + 'Index', listIndex);
 
-            output += await new Entry(child, this.compiler).compile()
+        return this.entry.children.map(child => new Entry(child, this.compiler).compile())
+      });
 
-            if (unusedList.repeatContainer) {
-              output += '</' + this.getElementName() + '>';
-            }
+      const promiseArray = [].concat.apply([], multiDimensionalArray);
+
+      (await Promise.all(promiseArray)).forEach(entryOutput => {
+        if (isRendered) {
+          if (unusedList.repeatContainer) {
+            output += '<' + this.getElementName();
+            attrResults.map(attrResult => output += attrResult);
+            output += '>';
           }
-        });
+
+          output += entryOutput;
+
+          if (unusedList.repeatContainer) {
+            output += '</' + this.getElementName() + '>';
+          }
+        }
       });
     } else if (this.compiler.unusedText) {
       let unusedText = await Promise.resolve(this.compiler.unusedText);
