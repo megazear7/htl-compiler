@@ -7,7 +7,7 @@
 #### Installation
 
 ```bash
-npm install htl-compiler
+npm install htl-compiler --save
 ```
 
 #### Node.JS Usage
