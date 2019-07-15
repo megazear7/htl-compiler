@@ -1,6 +1,6 @@
 # HTL Compiler
 
-> Compile HTL templates in the browser or in Node.JS. HTL is a HTML templating language originally created by Adobe and is now apart of the Apache Software Foundation.
+> Compile HTL templates in the browser or in Node. HTL is a HTML templating language originally created by Adobe and is now apart of the Apache Software Foundation.
 
 ## Usage
 
@@ -14,19 +14,27 @@ npm install htl-compiler --save
 
 ```js
 const Compiler = require('htl-compiler');
+
+new Compiler(/* ... */).compile();
+```
+
+#### ESM Module Usage
+
+```js
+import Compiler from '/node_modules/htl-compiler/dist/compiler-esm.js';
+
+new Compiler(/* ... */).compile();
 ```
 
 #### UMD Module Usage
 
 ```html
 <script src="/node_modules/htl-compiler/dist/compiler-umd.js"></script>
+
+<script type="text/javascript">
+  new Compiler(/* ... */).compile();
+</script>
 ```
-
-#### AMD Module Usage
-
-A AMD module is also provided at `/dist/compiler.amd.js`.
-
-TODO: Add an example usage of the AMD module.
 
 ## The Rundown
 
