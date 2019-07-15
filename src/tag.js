@@ -12,13 +12,13 @@ export default class Tag {
   async isContentRendered() {
     let isContentRendered = true;
 
-    Object.keys(this.entry.attribs).forEach(async attrStr => {
+    for (let attrStr of Object.keys(this.entry.attribs)) {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
       if ((attrName.isSlyTest() && ! await Promise.resolve(attr.value.getComputedValue())) || attrName.isSlyTemplate()) {
         isContentRendered = false;
       }
-    });
+    }
 
     return isContentRendered;
   }
@@ -26,13 +26,13 @@ export default class Tag {
   async isRendered() {
     let isRendered = this.getElementName() != 'sly';
 
-    Object.keys(this.entry.attribs).forEach(async attrStr => {
+    for (let attrStr of Object.keys(this.entry.attribs)) {
       const attrName = new AttrName(attrStr);
       const attr = new Attr(attrStr, this.entry.attribs[attrStr], this.compiler);
-      if ((attrName.isSlyTest() && ! await Promise.resolve(attr.value.getComputedValue())) || attrName.isSlyTemplate()) {
+      if ((attrName.isSlyTest() && ! await attr.value.getComputedValue()) || attrName.isSlyTemplate()) {
         isRendered = false;
       }
-    });
+    }
 
     return isRendered;
   }
