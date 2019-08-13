@@ -243,7 +243,7 @@ npm run example:browser
 The following command will build a UMD module at /dist/compiler.js
 
 ```
-npm build
+npm run build
 ```
 
 #### Testing

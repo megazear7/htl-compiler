@@ -2692,11 +2692,16 @@ export default (function (t) {
         return this.hasSlyIdentifier() ? this.parts[1] : void 0;
       }
     }]), t);
-  })(), S = /\$\{(.*)\}/g, E = (function () {
+  })(), S = /\$\{\s*([^\s]*)\s*\@?(.*)\}/g, E = (function () {
     function t(e, r) {
       (c()(this, t), this.expressionStr = e, this.compiler = r);
     }
     return (h()(t, [{
+      key: "getExpressionOptions",
+      value: function () {
+        return this.isValid() ? this.getMatches()[2] : void 0;
+      }
+    }, {
       key: "getUnwrappedExpression",
       value: function () {
         return this.isValid() ? this.getMatches()[1] : void 0;
