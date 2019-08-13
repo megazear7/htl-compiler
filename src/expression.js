@@ -1,9 +1,13 @@
-const expressionMatch = /\$\{(.*)\}/g;
+const expressionMatch = /\$\{\s*([^\s]*)\s*\@?(.*)\}/g
 
 export default class Expression {
   constructor(expressionStr, compiler) {
     this.expressionStr = expressionStr;
     this.compiler = compiler;
+  }
+
+  getExpressionOptions() {
+    return this.isValid() ? this.getMatches()[2] : undefined;
   }
 
   getUnwrappedExpression() {

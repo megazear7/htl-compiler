@@ -1,12 +1,1 @@
-<sly data-sly-use.movies="MoviesUseModel">
-
-<main>
-  <h1>${message}</h1>
-
-  <ol class="movies" data-sly-list.movie="${movies.movies}">
-    <li class="box">
-      <h3>${movie.name}</h3>
-      <p>${movie.formattedReleaseDate}</p>
-    </li>
-  </ol>
-</main>
+<h1>${message @ expressionOption='Test'}</h1>
