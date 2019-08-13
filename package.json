@@ -1,6 +1,6 @@
 {
     "name": "htl-compiler",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "A JavaScript compiler for HTL",
     "main": "dist/compiler-cjs.js",
     "repository": "https://github.com/megazear7/htl-compiler",
